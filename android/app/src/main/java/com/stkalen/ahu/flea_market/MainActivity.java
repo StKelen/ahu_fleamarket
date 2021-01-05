@@ -1,4 +1,4 @@
-package com.stkalen.ahu.ahu_flea_market;
+package com.stkalen.ahu.flea_market;
 
 import io.flutter.embedding.android.FlutterActivity;
 

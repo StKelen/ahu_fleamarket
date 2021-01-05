@@ -1,4 +1,4 @@
-name: ahu_flea_market
+name: flea_market
 description: 安小转——校园二手交易APP
 
 # The following line prevents the package from being accidentally published to
@@ -74,3 +74,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: iconfont
+      fonts:
+        - asset: assets/fonts/iconfont.ttf

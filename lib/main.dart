@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flea_market/pages/index.dart';
 
 void main() {
   runApp(App());
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('安小转客户端项目初始化'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      home: IndexPage(),
     );
   }
 }
-
