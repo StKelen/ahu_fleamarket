@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 class IconFont{
   static const String _family = 'iconfont';
   IconFont._();

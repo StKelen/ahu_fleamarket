@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flea_market/pages/index.dart';
+
+import 'routers/index.dart';
+import 'routers/routes.dart';
+import 'pages/index.dart';
 
 void main() {
   runApp(App());
 }
 
-class App extends StatefulWidget {
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Routes.configureRoutes(MyRouter.router);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      onGenerateRoute: MyRouter.router.generator,
       theme: ThemeData.light(),
       home: IndexPage(),
     );

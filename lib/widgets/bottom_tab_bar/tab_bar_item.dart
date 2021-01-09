@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flea_market/common/config/theme.dart';
+
 class TabBarItem extends StatelessWidget {
   final IconData icon;
   final String text;
@@ -14,16 +16,8 @@ class TabBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return RawMaterialButton(
       splashColor: Color(0xFFFFFFFF),
-      highlightColor: Color(0xFFFFFF),
+      highlightColor: Color(0x99FFFFFF),
       child: Container(
-        width: 46,
-        height: 46,
-        alignment: Alignment.center,
-        decoration: selected
-            ? BoxDecoration(
-            borderRadius: BorderRadius.circular(23),
-            color: Color(0xFFDDF3EC))
-            : null,
         child: Wrap(
           direction: Axis.vertical,
           alignment: WrapAlignment.end,
@@ -32,14 +26,14 @@ class TabBarItem extends StatelessWidget {
             Icon(
               icon,
               size: 25,
-              color: selected ? Color(0xFF1CAE81) : Color(0xFFB2AEC1),
+              color: selected ? Themes.primaryColor : Themes.textColorSecondary,
             ),
             Text(
               text,
               style: TextStyle(
                   fontSize: 10,
                   height: 1.6,
-                  color: selected ? Color(0xFF1CAE81) : Color(0xFFB2AEC1),
+                  color: selected ? Themes.primaryColor : Themes.textColorSecondary,
                   fontWeight: FontWeight.normal),
             )
           ],
