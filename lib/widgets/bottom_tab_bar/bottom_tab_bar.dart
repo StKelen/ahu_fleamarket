@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'tab_bar_item.dart';
 
+import 'tab_bar_item.dart';
 import 'tab_bar_decoration.dart';
 
 class BottomTabBar extends StatelessWidget {

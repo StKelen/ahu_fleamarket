@@ -30,6 +30,10 @@ dependencies:
   cupertino_icons: ^1.0.0
   fluro: ^1.7.8
   dio: ^3.0.10
+  scoped_model: ^1.1.0
+  fluttertoast: ^7.1.6
+  flutter_svg: ^0.18.0
+  shared_preferences: ^0.5.12+4
 
 dev_dependencies:
   flutter_test:

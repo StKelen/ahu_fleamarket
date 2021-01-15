@@ -1,3 +1,4 @@
+import 'package:flea_market/common/config/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'routers/index.dart';
@@ -16,7 +17,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute: MyRouter.router.generator,
-      theme: ThemeData.light(),
+      theme: ThemeData(
+          brightness: Brightness.light, primaryColor: Themes.primaryColor),
       home: IndexPage(),
     );
   }

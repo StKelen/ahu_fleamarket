@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flea_market/common/config/theme.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -10,7 +11,7 @@ class PrimaryButton extends StatelessWidget {
 
   PrimaryButton(
       {this.minWidth,
-      this.height,
+      this.height = 50,
       this.text,
       this.fontSize = 20,
       this.onPressed,
@@ -19,8 +20,10 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(height / 2),
+      borderRadius: BorderRadius.circular(
+          height != null ? height / 2 : size.width * 0.12),
       child: FlatButton(
         minWidth: minWidth,
         height: height,

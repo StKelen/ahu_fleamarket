@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 
-class TabBarItem extends StatelessWidget {
+class IconListButton extends StatelessWidget {
   final Widget icon;
   final String text;
-  final bool selected;
-  final int itemIndex;
-  final Function changeSelectedIndex;
 
-  TabBarItem(this.icon, this.text, this.itemIndex, this.selected,
-      this.changeSelectedIndex, {Key key}) : super(key: key);
+  IconListButton(this.icon, this.text, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +23,12 @@ class TabBarItem extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                  fontSize: 10,
-                  height: 1.6,
-                  color: selected ? Themes.primaryColor : Themes.textSecondaryColor,
-                  fontWeight: FontWeight.normal),
+                  fontSize: 14, height: 1.6, color: Themes.textPrimaryColor),
             )
           ],
         ),
       ),
-      onPressed: () {
-        changeSelectedIndex(itemIndex);
-      },
+      onPressed: () {},
     );
   }
 }

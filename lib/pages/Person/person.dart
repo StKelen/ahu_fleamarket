@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flea_market/common/images.dart';
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/routers/index.dart';
+
 import 'package:flea_market/widgets/primary_button/primary_button.dart';
 
 class Person extends StatefulWidget {
