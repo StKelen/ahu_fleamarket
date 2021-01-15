@@ -10,6 +10,7 @@ type Conf struct {
 	RunMode  string   `yaml:"RUN_MODE"`
 	Database Database `yaml:"database"`
 	Server   Server   `yaml:"server"`
+	App      App      `yaml:"app"`
 }
 
 type Database struct {
@@ -24,6 +25,11 @@ type Server struct {
 	Port int `yaml:"port"`
 }
 
+type App struct {
+	PageSize  int    `yaml:"page_size"`
+	JwtSecret string `yaml:"jwt_secret"`
+}
+
 var Setting = Conf{}
 
 func init() {
@@ -33,7 +39,7 @@ func init() {
 		return
 	}
 	err = yaml.Unmarshal(file, &Setting)
-	if err!= nil {
+	if err != nil {
 		log.Printf("Failed to unmarshal yaml file: %s", err)
 		return
 	}

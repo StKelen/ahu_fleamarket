@@ -1,8 +1,17 @@
 package models
 
 type LoginData struct {
-	Uid      string `json:"uid"`
+	Sid      string `json:"sid"`
 	Password string `json:"password"`
+}
+
+type FirstLoginUpdateData struct {
+	Sid string `json:"sid"`
+	Name string `json:"name"`
+	Sex string `json:"sex"`
+	Mobile string `json:"mobile"`
+	Nickname string `json:"nickname"`
+	Building uint `json:"building"`
 }
 
 type UserInfoData struct {
@@ -34,7 +43,7 @@ type UserInfoData struct {
 	PassportImg  string `json:"PASSPORT_IMG"`
 	UserAlias    string `json:"USER_ALIAS"`
 	Mobile       string `json:"MOBILE"`
-	UserName     string `json:"USER_NAME"`
+	Name     string `json:"USER_NAME"`
 	CardAvatarS  string `json:"CARD_AVATAR_S"`
 	Nation       string `json:"NATION"`
 	EndTime      int `json:"END_TIME"`

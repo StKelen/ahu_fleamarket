@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetResponse(c int, data ...interface{}) map[string]interface{} {
+func GetResponse(c int, data interface{}) map[string]interface{} {
 	if data == nil {
 		return gin.H{
 			"code": c,

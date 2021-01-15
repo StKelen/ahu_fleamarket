@@ -11,7 +11,7 @@ import (
 
 var ltRegExp = regexp.MustCompile(`<input type="hidden" id="lt" name="lt" value="([^"]+)" />`)
 
-func Login(uid string, password string) (error, *models.UserInfoData) {
+func Login(sid string, password string) (error, *models.UserInfoData) {
 	c := goreq.NewClient()
 	req := goreq.Get(conf.WisdomAhuLoginUrl).AddParam("service", conf.WisdomAhuHomeBaseUrl)
 	res := c.Do(req)
@@ -21,7 +21,7 @@ func Login(uid string, password string) (error, *models.UserInfoData) {
 	cookie := res.Cookies()
 	body := res.Text
 	lt := ltRegExp.FindStringSubmatch(body)[1]
-	result := DES.StrEnc(uid+password+lt, "1", "2", "3")
+	result := DES.StrEnc(sid+password+lt, "1", "2", "3")
 	jSessionId := ""
 	for _, c := range cookie {
 		if c.Name == "JSESSIONID" {
@@ -30,7 +30,7 @@ func Login(uid string, password string) (error, *models.UserInfoData) {
 	}
 	form := map[string]string{
 		"rsa":       result,
-		"ul":        strconv.Itoa(len(uid)),
+		"ul":        strconv.Itoa(len(sid)),
 		"pl":        strconv.Itoa(len(password)),
 		"lt":        lt,
 		"execution": "e1s1",
@@ -45,7 +45,7 @@ func Login(uid string, password string) (error, *models.UserInfoData) {
 	}
 	req = goreq.Post(conf.WisdomAhuUserInfoUrl)
 	req.SetJsonBody(map[string]string{
-		"BE_OPT_ID": DES.StrEnc(uid, "tp", "des", "param"),
+		"BE_OPT_ID": DES.StrEnc(sid, "tp", "des", "param"),
 	})
 	res = c.Do(req)
 	var userInfo models.UserInfoData
