@@ -2,9 +2,9 @@ package v1
 
 import (
 	"ahu_fleamarket/lib/code"
-	"ahu_fleamarket/lib/response"
 	"ahu_fleamarket/logging"
 	"ahu_fleamarket/models"
+	"ahu_fleamarket/pkg/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

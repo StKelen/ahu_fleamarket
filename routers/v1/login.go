@@ -3,10 +3,10 @@ package v1
 import (
 	"ahu_fleamarket/lib/code"
 	"ahu_fleamarket/lib/jwt"
-	"ahu_fleamarket/lib/response"
-	"ahu_fleamarket/lib/userInfoCrawler"
 	"ahu_fleamarket/logging"
 	"ahu_fleamarket/models"
+	"ahu_fleamarket/pkg/response"
+	"ahu_fleamarket/pkg/userInfoCrawler"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"

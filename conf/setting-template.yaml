@@ -17,3 +17,10 @@ server:
 app:
   page_size: 10
   jwt_secret: my_jwt
+  runtime_root_path: runtime/
+  upload_image_path: upload/images/
+  image_max_size: 5
+  image_allow_exts:
+    - .jpg
+    - .jpeg
+    - .png

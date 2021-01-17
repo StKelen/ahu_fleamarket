@@ -54,3 +54,9 @@ func Register(sid string, token string, name string, nickname string, sex string
 	}
 	return db.Create(&user).Error
 }
+
+func GetUserBySid(sid string) (error, User) {
+	var user User
+	err := db.Where("student_id = ?", sid).First(&user).Error
+	return err, user
+}

@@ -26,8 +26,15 @@ type Server struct {
 }
 
 type App struct {
-	PageSize  int    `yaml:"page_size"`
+	PageSize int `yaml:"page_size"`
+
 	JwtSecret string `yaml:"jwt_secret"`
+
+	RuntimeRootPath string `yaml:"runtime_root_path"`
+
+	UploadImagePath string   `yaml:"upload_image_path"`
+	ImageMaxSize    int64      `yaml:"image_max_size"`
+	ImageAllowExts  []string `yaml:"image_allow_exts"`
 }
 
 var Setting = Conf{}
