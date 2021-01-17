@@ -8,7 +8,6 @@ import 'package:flea_market/widgets/icon_button/icon_button.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0x00FFFFFF),

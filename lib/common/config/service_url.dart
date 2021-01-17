@@ -4,4 +4,6 @@ class ServiceUrl {
   static String buildingListUrl = _baseUrl + '/building';
   static String firstLoginUpdateUrl = _baseUrl + '/first-login-update';
   static String categoryUrl = _baseUrl + '/category';
+  static String uploadImageUrl = _baseUrl + '/image';
+  static String detailUrl = _baseUrl + '/detail';
 }

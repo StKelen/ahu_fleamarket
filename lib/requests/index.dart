@@ -21,7 +21,15 @@ class MyDio {
 
   static Future post(
       String url, dynamic data, Function resolve, Function reject) async {
-    var response = await MyDio.dio.post(url, data: data).catchError((e) {
+    await MyDio.dio.post(url, data: data).then((value) async {
+      if (value.headers != null && value.headers['Token'] != null) {
+        String token = value.headers['Token'].first;
+        SharedPreferences sp = await SharedPreferences.getInstance();
+        sp.setString("Token", token);
+        addToken();
+      }
+      resolve(value.data);
+    }).catchError((e) {
       var response = (e as DioError).response;
       if (response == null) {
         reject('网络异常');
@@ -29,13 +37,6 @@ class MyDio {
       }
       reject(response.data['msg']);
     });
-    if (response.headers != null && response.headers['Token'] != null) {
-      String token = response.headers['Token'].first;
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      sp.setString("Token", token);
-      addToken();
-    }
-    resolve(response.data);
   }
 
   static addToken() async {

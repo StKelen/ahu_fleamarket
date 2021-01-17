@@ -10,7 +10,7 @@ class PriceForm extends StatelessWidget {
 
   PriceForm({this.price, Key key}) : super(key: key);
 
-  final moneyRegexp = RegExp(r'^(0|[1-9][0-9]*).?[0-9]{0,2}$');
+  final moneyRegexp = RegExp(r'^(0|[1-9][0-9]*)\.?[0-9]{0,2}$');
 
   final _priceController = TextEditingController();
   final _buyPriceController = TextEditingController();
@@ -38,7 +38,7 @@ class PriceForm extends StatelessWidget {
       child: Form(
         autovalidateMode: AutovalidateMode.disabled,
         child: ListView(
-          shrinkWrap: false,
+          shrinkWrap: true,
           children: [
             FormInput(
               controller: _priceController,
