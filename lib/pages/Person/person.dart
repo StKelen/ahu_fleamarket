@@ -12,11 +12,10 @@ class Person extends StatefulWidget {
 }
 
 class _PersonState extends State<Person> {
-  
-  void onPressLoginBtn(){
+  void onPressLoginBtn() {
     MyRouter.router.navigateTo(context, RoutesPath.loginPage);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

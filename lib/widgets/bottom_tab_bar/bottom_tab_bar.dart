@@ -25,19 +25,22 @@ class BottomTabBar extends StatelessWidget {
           changeSelectedIndex);
     }).toList();
     return BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        elevation: 2,
-        child: Container(
-            padding: EdgeInsets.fromLTRB(0, 7, 0, 3),
-            child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: <Widget>[
-                  BottomBarDecoration(prevIndex, selectedIndex, items.length),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: items,
-                  )
-                ])));
+      shape: CircularNotchedRectangle(),
+      elevation: 2,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0, 7, 0, 3),
+        child: Stack(
+          alignment: AlignmentDirectional.center,
+          children: <Widget>[
+            BottomBarDecoration(prevIndex, selectedIndex, items.length),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: items,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

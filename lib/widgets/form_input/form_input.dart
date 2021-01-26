@@ -49,7 +49,7 @@ class FormInput extends StatelessWidget {
           hintText: hintText,
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(size.height / 2),
               borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
         ),

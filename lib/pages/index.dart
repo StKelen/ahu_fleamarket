@@ -7,6 +7,7 @@ import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/iconfont/icon_font.dart';
 
 import 'package:flea_market/widgets/bottom_tab_bar/bottom_tab_bar.dart';
+
 import 'Home/home.dart';
 import 'Person/person.dart';
 

@@ -1,19 +1,19 @@
 import 'dart:io';
-import 'package:crypto/crypto.dart';
-
-import 'package:flea_market/common/config/service_url.dart';
-import 'package:flea_market/requests/index.dart';
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 
-import 'package:flea_market/common/config/theme.dart';
+import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/common/categories.dart';
+import 'package:flea_market/common/config/theme.dart';
+import 'package:flea_market/common/config/service_url.dart';
 
+import 'package:flea_market/widgets/select_image/select_image.dart';
 import 'package:flea_market/widgets/primary_button/primary_button.dart';
 import 'package:flea_market/widgets/row_button/row_button.dart';
-import 'category_dropdown.dart';
+import 'package:flea_market/widgets/category_dropdown/category_dropdown.dart';
+
 import 'price_form.dart';
 
 class Upload extends StatefulWidget {
@@ -30,58 +30,15 @@ class _UploadState extends State<Upload> {
   double price = 0.00;
   double buyPrice = 0.00;
 
-  Function selectImage(ImageSource source, BuildContext ctx) {
-    return () async {
-      PickedFile pickedImage = await ImagePicker().getImage(source: source);
-      File image = File(pickedImage.path);
-      var imageMD5 = md5.convert(image.readAsBytesSync()).toString();
-      if (images.containsKey(imageMD5)) return;
-      setState(() {
-        images[imageMD5] = image;
-      });
-      Navigator.pop(ctx);
-    };
+  imageHandler(File image) {
+    var imageMD5 = md5.convert(image.readAsBytesSync()).toString();
+    if (images.containsKey(imageMD5)) return null;
+    setState(() {
+      images[imageMD5] = image;
+    });
   }
 
-  Function addImage(context) {
-    var size = MediaQuery.of(context).size;
-    return () => showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Container(
-            child: Padding(
-              padding: EdgeInsets.zero,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: size.width,
-                    child: FlatButton(
-                      child: Text(
-                        '从相册选择',
-                        style: TextStyle(
-                            fontSize: 18, color: Themes.textPrimaryColor),
-                      ),
-                      onPressed: selectImage(ImageSource.gallery, context),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width,
-                    child: FlatButton(
-                      child: Text(
-                        '拍照',
-                        style: TextStyle(
-                            fontSize: 18, color: Themes.textPrimaryColor),
-                      ),
-                      onPressed: selectImage(ImageSource.camera, context),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        });
-  }
+  Function addImage(context) => selectImage(context, imageHandler);
 
   Widget imageGridView() {
     return Builder(
@@ -126,11 +83,6 @@ class _UploadState extends State<Upload> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void onChangeCategory(value) {
     setState(() {
       cid = value['cid'];
@@ -162,24 +114,23 @@ class _UploadState extends State<Upload> {
     Navigator.pop(context);
   }
 
-  void onPublish() {
+  void onPublish() async {
     if (price.toStringAsFixed(2) == '0.00') {
       Fluttertoast.showToast(msg: '请不要白给');
       return;
     }
+
     var data = {
       "desc": _descController.text,
       "cid": cid,
       "price": price,
       "buy_price": buyPrice,
+      "images": images.keys.map((key) {
+        return MultipartFile.fromFileSync(images[key].path);
+      }).toList()
     };
-    MyDio.post(ServiceUrl.detailUrl, data, (res) async {
-      FormData data = FormData();
-      data.files.addAll(images.keys.map((key) {
-        return MapEntry("images", MultipartFile.fromFileSync(images[key].path));
-      }));
-      await MyDio.post(ServiceUrl.uploadImageUrl, data, (res) {}, (e) {});
-    }, () {});
+    var form = FormData.fromMap(data);
+    await MyDio.post(ServiceUrl.detailUrl, form, (res) {}, (e) {});
   }
 
   @override

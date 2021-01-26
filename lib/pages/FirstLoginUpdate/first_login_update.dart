@@ -1,15 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flea_market/common/code/code.dart';
 import 'package:flea_market/common/config/service_url.dart';
+import 'package:flea_market/common/images.dart';
 import 'package:flea_market/requests/index.dart';
 
+import 'package:flea_market/widgets/select_image/select_image.dart';
 import 'package:flea_market/widgets/building_list/building_list.dart';
 import 'package:flea_market/widgets/primary_button/primary_button.dart';
 import 'package:flea_market/widgets/form_input/form_input.dart';
+
+import 'avatar.dart';
 
 class FirstLoginUpdate extends StatefulWidget {
   final String sid;
@@ -34,10 +41,13 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
   final _sexController = TextEditingController();
   final _mobileController = TextEditingController();
   final _nicknameController = TextEditingController();
-  var _building = 0;
+  int _building = 0;
+  File image;
+  ImageProvider avatarImage = ExactAssetImage(Images.avatar);
 
   @override
   void initState() {
+    rootBundle.load(Images.avatar);
     _sidController.text = widget.sid;
     _nameController.text = widget.name;
     _sexController.text = widget.sex;
@@ -50,7 +60,7 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
     _building = value;
   }
 
-  void onUpdateInfo() {
+  void onUpdateInfo() async {
     var formState = _formKey.currentState as FormState;
     if (formState.validate()) {
       var sid = _sidController.value.text;
@@ -64,9 +74,13 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
         "sex": sex,
         "mobile": mobile,
         "nickname": nickname,
-        "building": _building
+        "bid": _building
       };
-      MyDio.post(ServiceUrl.firstLoginUpdateUrl, data, (res) async {
+      if (image != null) {
+        data["avatar"] = await MultipartFile.fromFile(image.path);
+      }
+      await MyDio.post(ServiceUrl.firstLoginUpdateUrl, FormData.fromMap(data),
+          (res) async {
         int code = res['code'];
         if (code != Code.Success) {
           Fluttertoast.showToast(msg: res['msg']);
@@ -75,11 +89,22 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
         SharedPreferences sp = await SharedPreferences.getInstance();
         sp.setString('user', jsonEncode(data));
       }, (e) {
-        Fluttertoast.showToast(msg: '网络异常');
+        Fluttertoast.showToast(msg: e);
       });
     } else {
       Fluttertoast.showToast(msg: '请完善相关信息');
     }
+  }
+
+  void onGetImage(File image) {
+    setState(() {
+      this.image = image;
+      avatarImage = FileImage(image);
+    });
+  }
+
+  Function onTapAvatar(context) {
+    return selectImage(context, onGetImage);
   }
 
   @override
@@ -99,12 +124,17 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
         title: Text('完善信息'),
       ),
       body: Container(
+        alignment: Alignment.topCenter,
         child: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.disabled,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                Avatar(
+                  image: avatarImage,
+                  onTap: onTapAvatar(context),
+                ),
                 FormInput(
                   icon: Icons.person,
                   controller: _sidController,
@@ -112,7 +142,7 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
                   enabled: false,
                 ),
                 FormInput(
-                  icon: Icons.face,
+                  icon: Icons.how_to_reg,
                   controller: _nameController,
                   labelText: '姓名',
                   enabled: false,
@@ -157,7 +187,6 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
             ),
           ),
         ),
-        alignment: Alignment.topCenter,
       ),
     );
   }

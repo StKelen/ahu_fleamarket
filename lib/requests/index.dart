@@ -6,22 +6,20 @@ class MyDio {
       BaseOptions(connectTimeout: 3000, receiveTimeout: 1000);
 
   static Future get(String url, Function resolve, Function reject) async {
-    await MyDio.dio.get(url).then((value) {
+    await dio.get(url).then((value) {
       resolve(value.data);
     }).catchError((e) {
       var response = (e as DioError).response;
       if (response == null) {
         reject('网络异常');
-        return null;
       }
       reject(response.data['msg']);
-      return null;
     });
   }
 
   static Future post(
       String url, dynamic data, Function resolve, Function reject) async {
-    await MyDio.dio.post(url, data: data).then((value) async {
+    await dio.post(url, data: data).then((value) async {
       if (value.headers != null && value.headers['Token'] != null) {
         String token = value.headers['Token'].first;
         SharedPreferences sp = await SharedPreferences.getInstance();
@@ -33,7 +31,6 @@ class MyDio {
       var response = (e as DioError).response;
       if (response == null) {
         reject('网络异常');
-        return;
       }
       reject(response.data['msg']);
     });

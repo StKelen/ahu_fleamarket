@@ -10,7 +10,9 @@ class TabBarItem extends StatelessWidget {
   final Function changeSelectedIndex;
 
   TabBarItem(this.icon, this.text, this.itemIndex, this.selected,
-      this.changeSelectedIndex, {Key key}) : super(key: key);
+      this.changeSelectedIndex,
+      {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +31,15 @@ class TabBarItem extends StatelessWidget {
               style: TextStyle(
                   fontSize: 10,
                   height: 1.6,
-                  color: selected ? Themes.primaryColor : Themes.textSecondaryColor,
+                  color: selected
+                      ? Themes.primaryColor
+                      : Themes.textSecondaryColor,
                   fontWeight: FontWeight.normal),
             )
           ],
         ),
       ),
-      onPressed: () {
-        changeSelectedIndex(itemIndex);
-      },
+      onPressed: () => changeSelectedIndex(itemIndex),
     );
   }
 }

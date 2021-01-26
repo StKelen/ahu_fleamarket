@@ -14,5 +14,8 @@ class Routes {
     router.define(RoutesPath.firstLoginUpdatePage,
         handler: firstLoginUpdateHandler);
     router.define(RoutesPath.uploadPage, handler: uploadHandler);
+    router.define(RoutesPath.detailPage, handler: detailHandler);
+    router.define(RoutesPath.categoryPage, handler: categoryHandler);
+    router.define(RoutesPath.searchPage, handler: searchHandler);
   }
 }
