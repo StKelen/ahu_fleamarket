@@ -1,7 +1,7 @@
 package models
 
 type Category struct {
-	Cid  uint    `gorm:"primaryKey;not null;autoIncrement;unique;column:category_id" json:"cid"`
+	ID  uint    `gorm:"primaryKey;not null;autoIncrement;unique;column:category_id" json:"cid"`
 	Icon string `gorm:"not null" json:"icon"`
 	Name string `gorm:"not null" json:"name"`
 }

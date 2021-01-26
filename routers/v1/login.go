@@ -6,9 +6,11 @@ import (
 	"ahu_fleamarket/logging"
 	"ahu_fleamarket/models"
 	"ahu_fleamarket/pkg/response"
+	"ahu_fleamarket/pkg/upload"
 	"ahu_fleamarket/pkg/userInfoCrawler"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -72,11 +74,16 @@ func Login(c *gin.Context) {
 
 func FirstLoginUpdate(c *gin.Context) {
 	var data models.FirstLoginUpdateData
-	err := c.BindJSON(&data)
+	err := c.ShouldBind(&data)
 	if err != nil {
-		logging.Logger.Errorf("Failed to bind first_login_update data: %s", err)
+		logging.Logger.Errorf("Failed to parse data: %s", err)
 		body, _ := ioutil.ReadAll(c.Request.Body)
 		logging.Logger.Debugf("data: %s", body)
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorBindData, nil))
+		return
+	}
+	if data.Sex != "男" && data.Sex != "女" {
+		logging.Logger.Errorf("Failed to get sex: %s", data.Sex)
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorBindData, nil))
 		return
 	}
@@ -91,11 +98,13 @@ func FirstLoginUpdate(c *gin.Context) {
 	}
 	token := c.Request.Header.Get("Token")
 	if len(token) == 0 {
+		logging.Logger.Errorf("Failed to get nil token.")
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
 		return
 	}
 	claim, err := jwt.ParseToken(token)
 	if err != nil {
+		logging.Logger.Errorf("Failed to parse token: %s", token)
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
 		return
 	}
@@ -103,7 +112,18 @@ func FirstLoginUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
 		return
 	}
-	err = models.Register(data.Sid, token, data.Name, data.Nickname, data.Sex, data.Mobile, data.Building)
+
+	var avatarPath = ""
+	if data.Avatar != nil {
+		err, path := upload.ImagesHandler([]*multipart.FileHeader{data.Avatar})
+		if err != nil {
+			logging.Logger.Errorf("Failed to upload avatar: %s", err)
+			c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUploadAvatar, nil))
+			return
+		}
+		avatarPath = path[0]
+	}
+	err = models.Register(data.Sid, token, data.Name, data.Nickname, avatarPath, data.Sex, data.Mobile, data.Bid)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorDataBase, nil))
 		return

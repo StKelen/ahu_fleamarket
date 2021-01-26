@@ -17,8 +17,12 @@ func InitRouter() *gin.Engine {
 		api.POST("/first-login-update", v1.FirstLoginUpdate)
 		api.GET("/building", v1.GetBuildingData)
 		api.GET("/category", v1.GetCategory)
-		api.POST("/image", v1.UploadImage)
+
+		api.GET("/detail", v1.GetDetail)
 		api.POST("/detail", v1.PublishDetail)
+
+		api.GET("/user", v1.GetUser)
+		api.GET("/list", v1.GetList)
 	}
 	return r
 }

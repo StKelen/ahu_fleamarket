@@ -1,7 +1,7 @@
 package models
 
 type Building struct {
-	Bid  int    `gorm:"primaryKey;not null;autoIncrement;unique;column:building_id" json:"bid"`
+	ID  int    `gorm:"primaryKey;not null;autoIncrement;unique;column:building_id" json:"bid"`
 	Name string `gorm:"not null" json:"name"`
 }
 

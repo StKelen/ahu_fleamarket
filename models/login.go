@@ -1,17 +1,20 @@
 package models
 
+import "mime/multipart"
+
 type LoginData struct {
 	Sid      string `json:"sid"`
 	Password string `json:"password"`
 }
 
 type FirstLoginUpdateData struct {
-	Sid string `json:"sid"`
-	Name string `json:"name"`
-	Sex string `json:"sex"`
-	Mobile string `json:"mobile"`
-	Nickname string `json:"nickname"`
-	Building uint `json:"building"`
+	Sid      string                `json:"sid" form:"sid"`
+	Avatar   *multipart.FileHeader `json:"avatar" form:"avatar"`
+	Name     string                `json:"name" form:"name"`
+	Sex      string                `json:"sex" form:"sex"`
+	Mobile   string                `json:"mobile" form:"mobile"`
+	Nickname string                `json:"nickname" form:"nickname"`
+	Bid      uint                  `json:"bid" form:"bid"`
 }
 
 type UserInfoData struct {

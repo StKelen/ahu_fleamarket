@@ -10,8 +10,12 @@ const (
 	UpdateUserInfo            = 101
 	UserExist                 = 102
 	ErrorUserToken            = 103
+	ErrorUploadAvatar         = 104
+	ErrorGetUser              = 110
 	ErrorUploadImage          = 201
 	ErrorUploadImageExtension = 202
 	ErrorUploadImageSize      = 203
 	ErrorUploadDetail         = 204
+	ErrorGetDetail            = 210
+	ErrorGetList              = 301
 )
