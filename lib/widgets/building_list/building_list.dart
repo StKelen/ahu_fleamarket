@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/service_url.dart';
@@ -11,8 +12,7 @@ class BuildingListFormField extends StatelessWidget {
   final Function validator;
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
-  BuildingListFormField({this.onChanged, this.validator, Key key})
-      : super(key: key);
+  BuildingListFormField({this.onChanged, this.validator, Key key}) : super(key: key);
 
   getBuildingList() => _memoizer.runOnce(() async {
         var data;
@@ -28,8 +28,8 @@ class BuildingListFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.all(20.w),
       width: size.width * 0.9,
       child: FutureBuilder(
         future: getBuildingList(),
@@ -41,7 +41,10 @@ class BuildingListFormField extends StatelessWidget {
             var list = snapshot.data['data'] as List;
             items = list.map((element) {
               return DropdownMenuItem(
-                child: Text(element['name']),
+                child: Text(
+                  element['name'],
+                  style: TextStyle(fontSize: 32.sp),
+                ),
                 value: element['bid'],
               );
             }).toList();
@@ -49,8 +52,9 @@ class BuildingListFormField extends StatelessWidget {
           return DropdownButtonFormField(
             items: items,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.list),
+              prefixIcon: Icon(Icons.list, size: 50.sp, color: Themes.primaryColor),
               labelText: '公寓楼栋',
+              labelStyle: TextStyle(fontSize: 32.sp),
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
               focusedBorder: OutlineInputBorder(

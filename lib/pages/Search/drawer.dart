@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/widgets/category_dropdown/category_dropdown.dart';
@@ -75,45 +76,35 @@ class _SearchDrawerState extends State<SearchDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    var drawerWidth = _drawerKey?.currentContext
-            ?.findRenderObject()
-            ?.paintBounds
-            ?.size
-            ?.width ??
-        304.0;
+    var drawerWidth =
+        _drawerKey?.currentContext?.findRenderObject()?.paintBounds?.size?.width ?? 304.0;
     return Drawer(
       key: _drawerKey,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 50.h),
         child: Stack(children: [
           ListView(children: [
             Text('公寓选择',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: Themes.primaryColor)),
+                    fontSize: 36.sp, fontWeight: FontWeight.w900, color: Themes.primaryColor)),
             BuildingDropdown(
                 leadingIcon: Icons.home_work,
                 leadingText: '公寓',
                 tail: buildingTail,
                 onChanged: onChangeBuilding),
-            SizedBox(height: 50),
+            SizedBox(height: 70.h),
             Text('分类选择',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: Themes.primaryColor)),
+                    fontSize: 36.sp, fontWeight: FontWeight.w900, color: Themes.primaryColor)),
             CategoryDropdown(
                 leadingIcon: Icons.category,
                 tail: categoryTail,
                 leadingText: '分类',
                 onChanged: onChangeCategory),
-            SizedBox(height: 50),
+            SizedBox(height: 70.h),
             Text('价格',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: Themes.primaryColor)),
+                    fontSize: 36.sp, fontWeight: FontWeight.w900, color: Themes.primaryColor)),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Expanded(
                   child: PriceInput(
@@ -125,7 +116,7 @@ class _SearchDrawerState extends State<SearchDrawer> {
                   child: Text('~',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 28,
+                          fontSize: 36.sp,
                           fontWeight: FontWeight.bold,
                           color: Themes.textPrimaryColor)),
                   flex: 1),
@@ -141,10 +132,10 @@ class _SearchDrawerState extends State<SearchDrawer> {
             bottom: 20,
             width: drawerWidth - 20,
             child: Container(
-              height: 50,
+              height: 100.h,
               alignment: Alignment.center,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(25.r),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -156,8 +147,8 @@ class _SearchDrawerState extends State<SearchDrawer> {
                           width: 2,
                         ),
                         borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(25),
-                          topLeft: Radius.circular(25),
+                          bottomLeft: Radius.circular(50.h),
+                          topLeft: Radius.circular(50.h),
                         ),
                       ),
                       child: MaterialButton(
@@ -166,7 +157,7 @@ class _SearchDrawerState extends State<SearchDrawer> {
                         child: Text('重置',
                             style: TextStyle(
                                 color: Themes.textPrimaryColor,
-                                fontSize: 16,
+                                fontSize: 28.sp,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 6)),
                         onPressed: onReset,
@@ -180,8 +171,8 @@ class _SearchDrawerState extends State<SearchDrawer> {
                           width: 2,
                         ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(25),
-                          bottomRight: Radius.circular(25),
+                          topRight: Radius.circular(50.h),
+                          bottomRight: Radius.circular(50.h),
                         ),
                       ),
                       child: MaterialButton(
@@ -191,7 +182,7 @@ class _SearchDrawerState extends State<SearchDrawer> {
                           '确定',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 28.sp,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 6),
                         ),
@@ -217,10 +208,10 @@ class PriceInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
         color: Themes.secondaryColor,
-        borderRadius: BorderRadius.circular(29),
+        borderRadius: BorderRadius.circular(30.h),
       ),
       child: TextField(
         controller: controller,
@@ -229,7 +220,7 @@ class PriceInput extends StatelessWidget {
         cursorColor: Themes.primaryColor,
         maxLines: 1,
         decoration: InputDecoration(hintText: label, border: InputBorder.none),
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 28.sp),
       ),
     );
   }

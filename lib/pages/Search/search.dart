@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/service_url.dart';
@@ -13,7 +14,6 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final _controller = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   bool desc = true;
@@ -67,10 +67,8 @@ class _SearchState extends State<Search> {
     newUrl += 'by=$order&';
     if (cid != 0) newUrl += 'cid=$cid&';
     if (bid != 0) newUrl += 'bid=$bid&';
-    if (minPrice != null && minPrice > 0)
-      newUrl += 'minPrice=${minPrice.toStringAsFixed(2)}&';
-    if (maxPrice != null && maxPrice > 0)
-      newUrl += 'maxPrice=${maxPrice.toStringAsFixed(2)}&';
+    if (minPrice != null && minPrice > 0) newUrl += 'minPrice=${minPrice.toStringAsFixed(2)}&';
+    if (maxPrice != null && maxPrice > 0) newUrl += 'maxPrice=${maxPrice.toStringAsFixed(2)}&';
     setState(() {
       url = newUrl;
     });
@@ -91,7 +89,7 @@ class _SearchState extends State<Search> {
                   top: 0,
                   width: size.width,
                   child: Container(
-                    height: 50,
+                    height: 60.h,
                     decoration: BoxDecoration(color: Colors.white),
                     child: Row(
                       children: [
@@ -103,7 +101,13 @@ class _SearchState extends State<Search> {
                                     : Themes.textSecondaryColor,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [Text('时间'), Icon(getIcon('time'))],
+                                  children: [
+                                    Text(
+                                      '时间',
+                                      style: TextStyle(fontSize: 28.sp),
+                                    ),
+                                    Icon(getIcon('time'))
+                                  ],
                                 ),
                                 onPressed: handleOrderClick('time'))),
                         Expanded(
@@ -115,7 +119,10 @@ class _SearchState extends State<Search> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('价格'),
+                                    Text(
+                                      '价格',
+                                      style: TextStyle(fontSize: 28.sp),
+                                    ),
                                     Icon(getIcon('price'))
                                   ],
                                 ),
@@ -126,20 +133,20 @@ class _SearchState extends State<Search> {
                                 textColor: Themes.textSecondaryColor,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [Text('筛选'), Icon(Icons.menu_open)],
+                                  children: [
+                                    Text(
+                                      '筛选',
+                                      style: TextStyle(fontSize: 28.sp),
+                                    ),
+                                    Icon(Icons.menu_open)
+                                  ],
                                 ),
                                 onPressed: handleDrawer)),
                       ],
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 50),
-                  child: ListView(
-                    controller: _controller,
-                    children: [DetailList(_controller, url)],
-                  ),
-                )
+                Container(margin: EdgeInsets.only(top: 60.h), child: DetailList(url))
               ],
             ),
       endDrawer: SearchDrawer(

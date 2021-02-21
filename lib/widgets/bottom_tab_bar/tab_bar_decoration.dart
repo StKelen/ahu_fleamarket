@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 
@@ -8,8 +9,7 @@ class BottomBarDecoration extends StatefulWidget {
   final int currentIndex;
   final int itemsCount;
 
-  BottomBarDecoration(this.prevIndex, this.currentIndex, this.itemsCount,
-      {Key key})
+  BottomBarDecoration(this.prevIndex, this.currentIndex, this.itemsCount, {Key key})
       : super(key: key);
 
   @override
@@ -32,8 +32,7 @@ class _BottomBarDecorationState extends State<BottomBarDecoration>
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
   }
 
   @override
@@ -47,21 +46,18 @@ class _BottomBarDecorationState extends State<BottomBarDecoration>
     super.didUpdateWidget(oldWidget);
     if (widget.prevIndex == widget.currentIndex) return;
     controller.reset();
-    animation = Tween<double>(
-            begin: prevDecorationLeftWidth, end: currentDecorationLeftWidth)
+    animation = Tween<double>(begin: prevDecorationLeftWidth, end: currentDecorationLeftWidth)
         .animate(controller)
-          ..addListener(() {
-            setState(() {});
-          });
+          ..addListener(() => setState(() {}));
     controller.forward();
   }
 
   bool calculateIsPlaying() {
     if (animation == null) return false;
-    if ((animation.value < prevDecorationLeftWidth + 46) &&
-        (animation.value > prevDecorationLeftWidth - 46)) return false;
-    if ((animation.value < currentDecorationLeftWidth + 46) &&
-        (animation.value > currentDecorationLeftWidth - 46)) return false;
+    if ((animation.value < prevDecorationLeftWidth + 80.r) &&
+        (animation.value > prevDecorationLeftWidth - 80.r)) return false;
+    if ((animation.value < currentDecorationLeftWidth + 80.r) &&
+        (animation.value > currentDecorationLeftWidth - 80.r)) return false;
     return true;
   }
 
@@ -69,13 +65,12 @@ class _BottomBarDecorationState extends State<BottomBarDecoration>
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     return Positioned(
-      left:
-          (animation == null ? prevDecorationLeftWidth : animation.value) - 23,
+      left: (animation == null ? prevDecorationLeftWidth : animation.value) - 40.r,
       child: AnimatedContainer(
-        width: calculateIsPlaying() ? 10 : 46,
-        height: calculateIsPlaying() ? 10 : 46,
+        width: calculateIsPlaying() ? 10.r : 80.r,
+        height: calculateIsPlaying() ? 10.r : 80.r,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(23),
+          borderRadius: BorderRadius.circular(40.r),
           color: calculateIsPlaying() ? Themes.primaryColor : Themes.secondaryColor,
         ),
         duration: Duration(milliseconds: 60),

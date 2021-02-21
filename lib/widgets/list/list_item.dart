@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/config/service_url.dart';
@@ -13,8 +14,7 @@ class ListItem extends StatelessWidget {
   final String avatar;
   final String nickname;
   final String building;
-  ListItem(this.did, this.image, this.title, this.price, this.avatar,
-      this.nickname, this.building,
+  ListItem(this.did, this.image, this.title, this.price, this.avatar, this.nickname, this.building,
       {Key key})
       : super(key: key);
 
@@ -25,19 +25,18 @@ class ListItem extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            offset: Offset(2, 3),
+            offset: Offset(2.w, 3.h),
             color: Color(0x44B2AEC1),
-            blurRadius: 3,
+            blurRadius: 3.w,
           )
         ],
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         child: InkWell(
           onTap: () {
-            MyRouter.router
-                .navigateTo(context, RoutesPath.detailPage + '?did=$did');
+            MyRouter.router.navigateTo(context, RoutesPath.detailPage + '?did=$did');
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,23 +47,23 @@ class ListItem extends StatelessWidget {
                 maxLines: 2,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 32.sp,
+                    letterSpacing: 1.sp,
                     color: Themes.textPrimaryColor),
               ),
               Text(
-                '¥$price',
+                ' ¥$price',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    height: 2,
+                    fontSize: 30.sp,
+                    height: 2.4.sp,
                     color: Colors.redAccent),
               ),
               Container(
-                margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(top: 10.h),
+                padding: EdgeInsets.all(15.w),
                 decoration: BoxDecoration(
-                    border: Border(
-                        top: BorderSide(width: 0.5, color: Colors.black12))),
+                    border: Border(top: BorderSide(width: 0.5, color: Colors.black12))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -72,20 +71,19 @@ class ListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CircleAvatar(
-                          radius: 14,
-                          backgroundImage: NetworkImage(
-                              ServiceUrl.uploadImageUrl + '/$avatar'),
+                          radius: 24.r,
+                          backgroundImage: NetworkImage(ServiceUrl.uploadImageUrl + '/$avatar'),
                         ),
-                        SizedBox(width: 5),
+                        SizedBox(width: 10.w),
                         Text(
                           nickname,
-                          style: TextStyle(color: Colors.black54, fontSize: 18),
+                          style: TextStyle(color: Colors.black54, fontSize: 28.sp),
                         )
                       ],
                     ),
                     Text(
                       building,
-                      style: TextStyle(color: Colors.black38),
+                      style: TextStyle(color: Colors.black38, fontSize: 28.sp),
                     )
                   ],
                 ),

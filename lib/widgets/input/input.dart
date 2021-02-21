@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 
@@ -19,22 +20,22 @@ class Input extends StatelessWidget {
       this.readOnly = false,
       this.isPassword = false,
       this.paddingHeight = 5,
-      this.height,
+      this.height = 50,
       this.onChanged,
       this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: paddingHeight),
-      width: size.width * 0.8,
+      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 0),
+      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      alignment: Alignment.center,
+      width: 600.w,
       height: height,
       decoration: BoxDecoration(
         color: Themes.secondaryColor,
-        borderRadius: BorderRadius.circular(29),
+        borderRadius: BorderRadius.circular(height / 2),
       ),
       child: TextField(
         readOnly: readOnly,
@@ -44,10 +45,14 @@ class Input extends StatelessWidget {
         obscureText: isPassword,
         maxLines: 1,
         decoration: InputDecoration(
-            icon: Icon(icon, color: Themes.primaryColor),
+            icon: Icon(
+              icon,
+              color: Themes.primaryColor,
+              size: 40.sp,
+            ),
             hintText: hintText,
             border: InputBorder.none),
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 34.sp),
       ),
     );
   }

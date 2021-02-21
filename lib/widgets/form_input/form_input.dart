@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 
@@ -33,9 +34,9 @@ class FormInput extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      width: size.width * 0.9,
+      margin: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+      width: 0.9 * 750.w,
       child: TextFormField(
         controller: controller,
         obscureText: isPassword,
@@ -43,20 +44,18 @@ class FormInput extends StatelessWidget {
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Themes.primaryColor),
+          prefixIcon: Icon(icon, color: Themes.primaryColor, size: 50.sp),
           prefixText: prefixText,
           labelText: labelText,
           hintText: hintText,
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
           focusedBorder: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(size.height / 2),
               borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
         ),
         style: TextStyle(
-            fontSize: 18,
-            color:
-                enabled ? Themes.textPrimaryColor : Themes.textSecondaryColor),
+            fontSize: 30.sp, color: enabled ? Themes.textPrimaryColor : Themes.textSecondaryColor),
         validator: validator,
       ),
     );

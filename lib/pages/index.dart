@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/routers/index.dart';
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/iconfont/icon_font.dart';
 
+import 'package:flea_market/widgets/global_appbar/appbar.dart';
 import 'package:flea_market/widgets/bottom_tab_bar/bottom_tab_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'Home/home.dart';
 import 'Person/person.dart';
@@ -19,16 +20,15 @@ class IndexPage extends StatefulWidget {
 class _IndexPageState extends State<IndexPage> {
   int prevIndex = 0;
   int selectedIndex = 0;
-  final String primaryColorStr =
-      '#' + Themes.primaryColor.value.toRadixString(16).substring(2);
+  final String primaryColorStr = '#' + Themes.primaryColor.value.toRadixString(16).substring(2);
   final String secondaryColorStr =
       '#' + Themes.textSecondaryColor.value.toRadixString(16).substring(2);
 
-  get tabItems => <Map>[
+  get tabItems => [
         {
           "icon": IconFont(
             IconNames.home,
-            size: 25,
+            size: 50.sp,
             color: selectedIndex == 0 ? primaryColorStr : secondaryColorStr,
           ),
           "label": '首页'
@@ -36,35 +36,30 @@ class _IndexPageState extends State<IndexPage> {
         {
           "icon": IconFont(
             IconNames.mine,
-            size: 25,
+            size: 50.sp,
             color: selectedIndex == 1 ? primaryColorStr : secondaryColorStr,
           ),
           "label": '我的'
         },
       ];
 
-  final pages = <Widget>[Home(), Person()];
+  final pages = [Home(), Person()];
 
-  void changeSelectedIndex(int index) {
-    setState(() {
-      prevIndex = selectedIndex;
-      selectedIndex = index;
-    });
-  }
+  void changeSelectedIndex(int index) => setState(() {
+        prevIndex = selectedIndex;
+        selectedIndex = index;
+      });
 
-  void onClickUploadBtn() {
-    MyRouter.router.navigateTo(context, RoutesPath.uploadPage);
-  }
-
-  @override
-  void initState() {
-    MyDio.addToken();
-    super.initState();
-  }
+  void onClickUploadBtn() => MyRouter.router.navigateTo(context, RoutesPath.uploadPage);
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    ScreenUtil.init(BoxConstraints(maxWidth: size.width, maxHeight: size.height),
+        designSize: Size(750, 1334), allowFontScaling: false);
+
     return Scaffold(
+      appBar: getGlobalAppBar(context),
       body: pages[selectedIndex],
       bottomNavigationBar: BottomTabBar(tabItems,
           prevIndex: prevIndex,

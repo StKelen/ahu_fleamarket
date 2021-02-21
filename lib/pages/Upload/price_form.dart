@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/widgets/form_input/form_input.dart';
 import 'package:flea_market/widgets/primary_button/primary_button.dart';
@@ -34,7 +35,7 @@ class PriceForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
+      padding: EdgeInsets.fromLTRB(30.w, 10.h, 30.w, 30.h),
       child: Form(
         autovalidateMode: AutovalidateMode.disabled,
         child: ListView(
@@ -56,6 +57,7 @@ class PriceForm extends StatelessWidget {
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.allow(moneyRegexp)],
             ),
+            SizedBox(height: 20.h),
             PrimaryButton(
               text: '确认',
               onPressed: getPrice,

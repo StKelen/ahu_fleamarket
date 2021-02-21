@@ -1,8 +1,9 @@
-import 'package:flea_market/routers/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/config/theme.dart';
+import 'package:flea_market/routers/index.dart';
 
 class IconListButton extends StatelessWidget {
   final Widget icon;
@@ -25,15 +26,13 @@ class IconListButton extends StatelessWidget {
             icon,
             Text(
               text,
-              style: TextStyle(
-                  fontSize: 14, height: 1.6, color: Themes.textPrimaryColor),
+              style: TextStyle(fontSize: 26.sp, height: 2.3.sp, color: Themes.textPrimaryColor),
             )
           ],
         ),
       ),
       onPressed: () {
-        var path =
-            '${RoutesPath.categoryPage}?cid=$cid&name=${Uri.encodeQueryComponent(text)}';
+        var path = '${RoutesPath.categoryPage}?cid=$cid&name=${Uri.encodeQueryComponent(text)}';
         MyRouter.router.navigateTo(context, path);
       },
     );

@@ -1,13 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flea_market/common/im/im.dart';
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/images.dart';
 import 'package:flea_market/common/code/code.dart';
+import 'package:flea_market/provider/global.dart';
 import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/routers/index.dart';
 
@@ -24,22 +25,11 @@ class _LoginState extends State<Login> {
   String password = '';
   final sidRegExp = RegExp(r'[A-Z][0-9]{4,7}');
 
-  void onClickBack() {
-    Navigator.pop(context);
-  }
+  void onClickBack() => Navigator.pop(context);
 
-  void onChangeUid(String value) {
-    sid = value;
-  }
+  void onChangeUid(String value) => sid = value;
 
-  void onChangePassword(String value) {
-    password = value;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  void onChangePassword(String value) => password = value;
 
   void onLogin() async {
     var data = {
@@ -53,8 +43,7 @@ class _LoginState extends State<Login> {
         var name = Uri.encodeQueryComponent(res['data']['name']);
         var sex = Uri.encodeQueryComponent(res['data']['sex']);
         var mobile = Uri.encodeQueryComponent(res['data']['mobile']);
-        var path = RoutesPath.firstLoginUpdatePage +
-            '?sid=$sid&name=$name&sex=$sex&mobile=$mobile';
+        var path = RoutesPath.firstLoginUpdatePage + '?sid=$sid&name=$name&sex=$sex&mobile=$mobile';
         MyRouter.router.navigateTo(context, path);
         return;
       }
@@ -62,21 +51,19 @@ class _LoginState extends State<Login> {
         Fluttertoast.showToast(msg: res['msg']);
         return;
       }
-      var sp = await SharedPreferences.getInstance();
-      sp.setString("user", jsonEncode(res['data']));
+      int uid = res['data']['uid'];
+      GlobalModel.setUserInfo(uid, sid);
+      await IM.login(uid, sid);
       Fluttertoast.showToast(msg: '登录成功');
+      Navigator.pop(context);
     }, (e) {
       Fluttertoast.showToast(
-          msg: e,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          fontSize: 20);
+          msg: e, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.CENTER, fontSize: 20);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -91,31 +78,34 @@ class _LoginState extends State<Login> {
       ),
       body: Center(
         child: Column(
-          children: <Widget>[
+          children: [
             Image.asset(
               Images.logo,
-              width: size.width * 0.7,
+              width: 500.w,
               fit: BoxFit.fitWidth,
             ),
-            SizedBox(height: size.height * 0.02),
+            SizedBox(height: 40.h),
             Input(
               icon: Icons.person,
+              height: 80.h,
               hintText: '智慧安大用户名',
               onChanged: onChangeUid,
             ),
             Input(
               icon: Icons.lock,
+              height: 80.h,
               hintText: '智慧安大密码',
               isPassword: true,
               onChanged: onChangePassword,
             ),
             SizedBox(
-              height: size.height * 0.01,
+              height: 20.h,
             ),
             PrimaryButton(
-              minWidth: size.width * 0.6,
-              height: size.width * 0.12,
-              text: '登录',
+              width: 400.w,
+              height: 80.h,
+              text: '登 录',
+              fontSize: 44.sp,
               onPressed: onLogin,
             )
           ],

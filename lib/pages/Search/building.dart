@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/common/config/theme.dart';
@@ -12,8 +13,7 @@ class BuildingDropdown extends StatefulWidget {
   final Widget tail;
   final Function onChanged;
 
-  BuildingDropdown(
-      {this.leadingText, this.leadingIcon, this.tail, this.onChanged, Key key})
+  BuildingDropdown({this.leadingText, this.leadingIcon, this.tail, this.onChanged, Key key})
       : super(key: key);
   @override
   _BuildingDropdownState createState() => _BuildingDropdownState();
@@ -51,21 +51,20 @@ class _BuildingDropdownState extends State<BuildingDropdown> {
             }).toList();
           }
           return Padding(
-            padding: EdgeInsetsDirectional.only(start: 16.0, end: 12.0),
+            padding: EdgeInsetsDirectional.only(start: 16.w, end: 12.w),
             child: Row(
               children: [
                 Container(
                   child: Icon(
                     widget.leadingIcon,
-                    size: 24,
+                    size: 38.sp,
                     color: Themes.primaryColor,
                   ),
-                  width: 30,
-                  height: 30,
+                  width: 60.r,
+                  height: 60.r,
                   decoration: BoxDecoration(
-                      color: Themes.secondaryColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      color: Themes.secondaryColor, borderRadius: BorderRadius.circular(30.r)),
+                  margin: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                 ),
                 Expanded(
                   child: DropdownButton(
@@ -73,15 +72,12 @@ class _BuildingDropdownState extends State<BuildingDropdown> {
                     items: items,
                     onChanged: widget.onChanged,
                     icon: Row(
-                      children: [
-                        widget.tail ?? Text(''),
-                        Icon(Icons.arrow_drop_down)
-                      ],
+                      children: [widget.tail ?? Text(''), Icon(Icons.arrow_drop_down)],
                     ),
                     hint: Text(
                       widget.leadingText,
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 30.sp,
                           color: Themes.textPrimaryColor,
                           fontWeight: FontWeight.bold),
                     ),

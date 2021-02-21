@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 
@@ -9,8 +10,7 @@ class TabBarItem extends StatelessWidget {
   final int itemIndex;
   final Function changeSelectedIndex;
 
-  TabBarItem(this.icon, this.text, this.itemIndex, this.selected,
-      this.changeSelectedIndex,
+  TabBarItem(this.icon, this.text, this.itemIndex, this.selected, this.changeSelectedIndex,
       {Key key})
       : super(key: key);
 
@@ -29,11 +29,9 @@ class TabBarItem extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                  fontSize: 10,
-                  height: 1.6,
-                  color: selected
-                      ? Themes.primaryColor
-                      : Themes.textSecondaryColor,
+                  fontSize: 16.sp,
+                  height: 2.2.sp,
+                  color: selected ? Themes.primaryColor : Themes.textSecondaryColor,
                   fontWeight: FontWeight.normal),
             )
           ],

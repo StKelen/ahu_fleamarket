@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/common/categories.dart';
@@ -47,8 +48,7 @@ class _UploadState extends State<Upload> {
           shrinkWrap: true,
           primary: false,
           itemCount: images.length + 1,
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (context, index) {
             var content;
             if (index == images.length) {
@@ -57,13 +57,13 @@ class _UploadState extends State<Upload> {
                 onPressed: addImage(ctx),
                 child: Icon(
                   Icons.add,
-                  size: 80,
+                  size: 160.sp,
                   color: Themes.primaryColor,
                 ),
               );
             } else {
               content = ClipRRect(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10.r),
                 child: Image.file(
                   (images.values.toList())[index],
                   fit: BoxFit.cover,
@@ -72,10 +72,9 @@ class _UploadState extends State<Upload> {
             }
             return Container(
               child: content,
-              margin: EdgeInsets.all(3),
+              margin: EdgeInsets.all(4.w),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Themes.secondaryColor),
+                  borderRadius: BorderRadius.circular(10.r), color: Themes.secondaryColor),
             );
           },
         );
@@ -137,27 +136,15 @@ class _UploadState extends State<Upload> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          color: Themes.primaryColor,
-          splashColor: Color(0x00FFFFFF),
-          highlightColor: Color(0x00FFFFFF),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          '发布闲置物品',
-          style: TextStyle(color: Themes.textPrimaryColor),
-        ),
-        actions: <Widget>[
+        title: Text('发布闲置物品'),
+        actions: [
           Padding(
-              padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(0, 10.h, 20.w, 10.h),
               child: PrimaryButton(
                 text: '发布',
                 onPressed: onPublish,
-                fontSize: 16,
-                minWidth: 40,
+                fontSize: 24.sp,
+                width: 100.w,
               )),
         ],
         centerTitle: true,
@@ -166,21 +153,22 @@ class _UploadState extends State<Upload> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
+          children: [
             TextField(
               controller: _descController,
               autofocus: false,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 32.sp),
               decoration: InputDecoration(
                   hintText: '说说你的使用感受、购买渠道和转手原因吧~',
                   hintStyle: TextStyle(
                     color: Themes.textSecondaryColor,
                   ),
                   border: OutlineInputBorder(borderSide: BorderSide.none)),
-              maxLines: 5,
+              maxLines: 8,
               cursorColor: Themes.primaryColor,
             ),
             imageGridView(),
+            SizedBox(height: 15.h),
             CategoryDropdown(
               leadingText: '分类',
               leadingIcon: Icons.category,

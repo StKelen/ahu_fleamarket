@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/categories.dart';
 import 'package:flea_market/common/config/service_url.dart';
@@ -13,8 +14,7 @@ class CategoryDropdown extends StatefulWidget {
   final Widget tail;
   final Function onChanged;
 
-  CategoryDropdown(
-      {this.leadingText, this.leadingIcon, this.tail, this.onChanged, Key key})
+  CategoryDropdown({this.leadingText, this.leadingIcon, this.tail, this.onChanged, Key key})
       : super(key: key);
 
   @override
@@ -52,11 +52,11 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                   width: size.width,
                   child: Row(
                     children: [
-                      category(element['icon'], 28),
+                      category(element['icon'], 50.sp),
+                      SizedBox(width: 15.w),
                       Text(
                         element['name'],
-                        style: TextStyle(
-                            fontSize: 18, color: Themes.textPrimaryColor),
+                        style: TextStyle(fontSize: 32.sp, color: Themes.textPrimaryColor),
                       )
                     ],
                     mainAxisSize: MainAxisSize.max,
@@ -69,21 +69,20 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
             }).toList();
           }
           return Padding(
-            padding: EdgeInsetsDirectional.only(start: 16.0, end: 12.0),
+            padding: EdgeInsetsDirectional.only(start: 16.w, end: 12.w),
             child: Row(
               children: [
                 Container(
                   child: Icon(
                     widget.leadingIcon,
-                    size: 24,
+                    size: 38.sp,
                     color: Themes.primaryColor,
                   ),
-                  width: 30,
-                  height: 30,
+                  width: 60.r,
+                  height: 60.r,
                   decoration: BoxDecoration(
-                      color: Themes.secondaryColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      color: Themes.secondaryColor, borderRadius: BorderRadius.circular(30.r)),
+                  margin: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                 ),
                 Expanded(
                   child: DropdownButton(
@@ -91,15 +90,12 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                     items: items,
                     onChanged: widget.onChanged,
                     icon: Row(
-                      children: [
-                        widget.tail ?? Text(''),
-                        Icon(Icons.arrow_drop_down)
-                      ],
+                      children: [widget.tail ?? Text(''), Icon(Icons.arrow_drop_down)],
                     ),
                     hint: Text(
                       widget.leadingText,
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 30.sp,
                           color: Themes.textPrimaryColor,
                           fontWeight: FontWeight.bold),
                     ),

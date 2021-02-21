@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/widgets/list/list.dart';
 
@@ -13,7 +14,6 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
-  final _scrollController = ScrollController();
   String url;
 
   @override
@@ -25,11 +25,13 @@ class _CategoryState extends State<Category> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('分类：${widget.name}')),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: DetailList(_scrollController, url),
+      appBar: AppBar(
+        title: Text('分类：${widget.name}'),
+        backgroundColor: Color(0xFFFFFFFF),
+        elevation: 0,
+        iconTheme: IconThemeData(color: Themes.primaryColor),
       ),
+      body: DetailList(url),
     );
   }
 }

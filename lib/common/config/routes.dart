@@ -6,4 +6,8 @@ class RoutesPath {
   static String detailPage = '/detail';
   static String categoryPage = '/category';
   static String searchPage = '/search';
+  static String chatListPage = '/chat-list';
+  static String conversationPage = '/conversation';
+  static String publishListPage = '/publish';
+  static String boughtListPage = '/bought';
 }

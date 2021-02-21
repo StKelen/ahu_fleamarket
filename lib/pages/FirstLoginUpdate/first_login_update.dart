@@ -1,15 +1,16 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/code/code.dart';
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/common/images.dart';
+import 'package:flea_market/common/im/im.dart';
 import 'package:flea_market/requests/index.dart';
+import 'package:flea_market/provider/global.dart';
 
 import 'package:flea_market/widgets/select_image/select_image.dart';
 import 'package:flea_market/widgets/building_list/building_list.dart';
@@ -24,8 +25,7 @@ class FirstLoginUpdate extends StatefulWidget {
   final String sex;
   final String mobile;
 
-  FirstLoginUpdate({this.sid, this.name, this.sex, this.mobile, Key key})
-      : super(key: key);
+  FirstLoginUpdate({this.sid, this.name, this.sex, this.mobile, Key key}) : super(key: key);
 
   @override
   _FirstLoginUpdateState createState() => _FirstLoginUpdateState();
@@ -79,15 +79,17 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
       if (image != null) {
         data["avatar"] = await MultipartFile.fromFile(image.path);
       }
-      await MyDio.post(ServiceUrl.firstLoginUpdateUrl, FormData.fromMap(data),
-          (res) async {
+      await MyDio.post(ServiceUrl.firstLoginUpdateUrl, FormData.fromMap(data), (res) async {
         int code = res['code'];
         if (code != Code.Success) {
           Fluttertoast.showToast(msg: res['msg']);
           return;
         }
-        SharedPreferences sp = await SharedPreferences.getInstance();
-        sp.setString('user', jsonEncode(data));
+        int uid = res['data']['uid'];
+        await IM.register(uid, sid, nickname, image?.path ?? null);
+        Fluttertoast.showToast(msg: '注册成功', backgroundColor: Colors.black);
+        GlobalModel.setUserInfo(uid, sid);
+        Navigator.popUntil(context, (route) => route.isFirst);
       }, (e) {
         Fluttertoast.showToast(msg: e);
       });
@@ -118,10 +120,9 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('完善信息'),
+        title: Text('完善个人信息'),
       ),
       body: Container(
         alignment: Alignment.topCenter,
@@ -130,7 +131,7 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
           autovalidateMode: AutovalidateMode.disabled,
           child: SingleChildScrollView(
             child: Column(
-              children: <Widget>[
+              children: [
                 Avatar(
                   image: avatarImage,
                   onTap: onTapAvatar(context),
@@ -159,9 +160,7 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
                   controller: _mobileController,
                   validator: (String value) {
                     if (value == '') return null;
-                    return mobileRegExp.hasMatch(value.trim())
-                        ? null
-                        : '手机号格式错误';
+                    return mobileRegExp.hasMatch(value.trim()) ? null : '手机号格式错误';
                   },
                 ),
                 FormInput(
@@ -180,7 +179,9 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
                 ),
                 PrimaryButton(
                   text: '完成',
-                  minWidth: size.width * 0.8,
+                  width: 300.w,
+                  fontSize: 44.sp,
+                  height: 80.h,
                   onPressed: onUpdateInfo,
                 )
               ],

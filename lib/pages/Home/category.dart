@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/service_url.dart';
@@ -27,10 +28,7 @@ class Category extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                offset: Offset(2, 3), color: Color(0x44B2AEC1), blurRadius: 5)
-          ]),
+          boxShadow: [BoxShadow(offset: Offset(2, 3), color: Color(0x44B2AEC1), blurRadius: 5)]),
       child: FutureBuilder(
         future: getCategories(),
         builder: (ctx, snapshot) {
@@ -38,15 +36,15 @@ class Category extends StatelessWidget {
             return Center(
                 child: Text(
               '正在加载',
-              style: TextStyle(color: Themes.textPrimaryColor, fontSize: 20),
+              style: TextStyle(color: Themes.textPrimaryColor, fontSize: 20.sp),
             ));
           var data = snapshot.data['data'] as List;
           return GridView.count(
               shrinkWrap: true,
               crossAxisCount: 5,
               children: data.map((element) {
-                return IconListButton(category(element['icon'], 40),
-                    element['name'], element['cid']);
+                return IconListButton(
+                    category(element['icon'], 70.sp), element['name'], element['cid']);
               }).toList());
         },
       ),
