@@ -2,6 +2,7 @@ package v1
 
 import (
 	"ahu_fleamarket/lib/code"
+	"ahu_fleamarket/lib/jsonTime"
 	"ahu_fleamarket/lib/jwt"
 	"ahu_fleamarket/logging"
 	"ahu_fleamarket/models"
@@ -47,7 +48,7 @@ func PublishDetail(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUploadDetail, nil))
 		return
 	}
-	title := strings.Split(desc,"\n")[0]
+	title := strings.Split(desc, "\n")[0]
 	if utf8.RuneCountInString(title) > 20 {
 		title = string([]rune(desc)[:20])
 	}
@@ -115,20 +116,7 @@ func GetDetail(c *gin.Context) {
 		imagesPath[i] = image.Path
 	}
 
-	var publishTimeStr string
-	publishTimeStr = "发布于x年前"
-	uploadTime := time.Time(detail.UploadTime)
-	if uploadTime.AddDate(1, 0, 0).Before(time.Now()) {
-		publishTimeStr = fmt.Sprintf("发布于%d年前", time.Now().Year()-uploadTime.Year())
-	} else if uploadTime.AddDate(0, 1, 0).Before(time.Now()) {
-		publishTimeStr = fmt.Sprintf("发布于%1.0f个月前", time.Now().Sub(uploadTime).Hours()/24/30)
-	} else if uploadTime.AddDate(0, 0, 1).Before(time.Now()) {
-		publishTimeStr = fmt.Sprintf("发布于%1.0f天前", time.Now().Sub(uploadTime).Hours()/24)
-	} else if uploadTime.Add(time.Hour).Before(time.Now()) {
-		publishTimeStr = fmt.Sprintf("发布于%1.0f小时前", time.Now().Sub(uploadTime).Hours())
-	} else {
-		publishTimeStr = fmt.Sprintf("发布于%1.0f分钟前", time.Now().Sub(uploadTime).Minutes())
-	}
+	publishTimeStr := timeHandler(detail.UploadTime)
 	c.JSON(http.StatusOK, response.GetResponse(code.Success, gin.H{
 		"did":          detail.ID,
 		"desc":         detail.Desc,
@@ -140,4 +128,99 @@ func GetDetail(c *gin.Context) {
 		"images":       imagesPath,
 	}))
 	return
+}
+
+func GetDetailBrief(c *gin.Context) {
+	didStr := c.Query("did")
+	if didStr == "" {
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetDetail, nil))
+		return
+	}
+	did, err := strconv.Atoi(didStr)
+	if err != nil {
+		logging.Logger.Errorf("Failed to parse detail_id: %s", didStr)
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetDetail, nil))
+		return
+	}
+	token := c.Request.Header.Get("Token")
+	if len(token) == 0 {
+		logging.Logger.Errorf("Failed to get nil token.")
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
+		return
+	}
+	claim, err := jwt.ParseToken(token)
+	if err != nil {
+		logging.Logger.Errorf("Failed to parse token: %s", token)
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
+		return
+	}
+	err, data := models.GetDetailByIdBrief(uint(did))
+	if err != nil {
+		logging.Logger.Errorf("Faileed to get detail brief by did: %d,err: %s", did, err)
+		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGetDetail, nil))
+		return
+	}
+
+	publishTimeStr := timeHandler(data.UploadTime)
+	c.JSON(http.StatusOK, response.GetResponse(code.Success, gin.H{
+		"did":          data.ID,
+		"price":        data.Price,
+		"buy_price":    data.BuyPrice,
+		"publish_date": publishTimeStr,
+		"image":        data.Path,
+		"is_buyer":     claim.Uid != data.Uid,
+	}))
+	return
+}
+
+func DeleteDetail(c *gin.Context) {
+	didStr := c.Query("did")
+	if didStr == "" {
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetDetail, nil))
+		return
+	}
+	did, err := strconv.Atoi(didStr)
+	if err != nil {
+		logging.Logger.Errorf("Failed to parse detail_id: %s", didStr)
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetDetail, nil))
+		return
+	}
+
+	token := c.Request.Header.Get("Token")
+	if len(token) == 0 {
+		logging.Logger.Errorf("Failed to get nil token.")
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
+		return
+	}
+	claim, err := jwt.ParseToken(token)
+	if err != nil {
+		logging.Logger.Errorf("Failed to parse token: %s", token)
+		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
+		return
+	}
+	err = models.DeleteDetail(claim.Uid, uint(did))
+	if err != nil {
+		logging.Logger.Errorf("Failed to delete detail: %s", err)
+		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorDataBase, nil))
+		return
+	}
+	c.JSON(http.StatusOK, response.GetResponse(code.Success, nil))
+	return
+}
+
+func timeHandler(t jsonTime.JSONTime) string {
+	uploadTime := time.Time(t)
+	var publishTimeStr string
+	if uploadTime.AddDate(1, 0, 0).Before(time.Now()) {
+		publishTimeStr = fmt.Sprintf("发布于%d年前", time.Now().Year()-uploadTime.Year())
+	} else if uploadTime.AddDate(0, 1, 0).Before(time.Now()) {
+		publishTimeStr = fmt.Sprintf("发布于%1.0f个月前", time.Now().Sub(uploadTime).Hours()/24/30)
+	} else if uploadTime.AddDate(0, 0, 1).Before(time.Now()) {
+		publishTimeStr = fmt.Sprintf("发布于%1.0f天前", time.Now().Sub(uploadTime).Hours()/24)
+	} else if uploadTime.Add(time.Hour).Before(time.Now()) {
+		publishTimeStr = fmt.Sprintf("发布于%1.0f小时前", time.Now().Sub(uploadTime).Hours())
+	} else {
+		publishTimeStr = fmt.Sprintf("发布于%1.0f分钟前", time.Now().Sub(uploadTime).Minutes())
+	}
+	return publishTimeStr
 }

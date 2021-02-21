@@ -9,14 +9,16 @@ import (
 var jwtSecret = []byte(conf.Setting.App.JwtSecret)
 
 type Claims struct {
+	Uid  uint
 	Sid  string
 	Name string
 	Time int64
 	jwt.StandardClaims
 }
 
-func GenerateToken(sid string, name string) (string, error) {
+func GenerateToken(uid uint, sid string, name string) (string, error) {
 	claims := Claims{
+		Uid:  uid,
 		Sid:  sid,
 		Name: name,
 		Time: time.Now().UnixNano(),

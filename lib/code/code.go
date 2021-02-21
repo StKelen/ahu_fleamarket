@@ -18,4 +18,8 @@ const (
 	ErrorUploadDetail         = 204
 	ErrorGetDetail            = 210
 	ErrorGetList              = 301
+	ErrorGetAvatar            = 401
+	ErrorGetStarInfo          = 501
+	ErrorGetExchangeInfo      = 601
+	ErrorHandleExchangeRequest = 602
 )

@@ -31,14 +31,14 @@ func Login(c *gin.Context) {
 		return
 	}
 	logging.Logger.Infof("Sid: %s, name: %s login Wisdom AHU.", userInfo.IdNumber, userInfo.Name)
-	err, isRegistered := models.CheckUserRegistered(userInfo.IdNumber)
+	err, isRegistered, uid := models.CheckUserRegistered(userInfo.IdNumber)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorDataBase, nil))
 		logging.Logger.Errorf("Failed to check user is registered: %s", err)
 		return
 	}
 	if isRegistered {
-		err, token, user := models.UpdateUserToken(userInfo.IdNumber, userInfo.Name)
+		err, token, user := models.UpdateUserToken(uid, userInfo.IdNumber, userInfo.Name)
 		if err != nil {
 			logging.Logger.Errorf("Failed to update user token: %s", err)
 			c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorDataBase, nil))
@@ -47,16 +47,11 @@ func Login(c *gin.Context) {
 		logging.Logger.Infof("Sid: %s, name: %s login.", userInfo.IdNumber, userInfo.Name)
 		c.Header("Token", token)
 		c.JSON(http.StatusOK, response.GetResponse(code.Success, gin.H{
-			"sid":      user.Sid,
-			"name":     user.Name,
-			"sex":      user.Sex,
-			"mobile":   user.Mobile,
-			"nickname": user.Nickname,
-			"building": user.Bid,
+			"uid": user.ID,
 		}))
 		return
 	}
-	token, err := jwt.GenerateToken(userInfo.IdNumber, userInfo.Name)
+	token, err := jwt.GenerateToken(0, userInfo.IdNumber, userInfo.Name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGenerateToken, nil))
 		logging.Logger.Errorf("Failed to generate token: %s", err)
@@ -87,7 +82,7 @@ func FirstLoginUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorBindData, nil))
 		return
 	}
-	err, registered := models.CheckUserRegistered(data.Sid)
+	err, registered, _ := models.CheckUserRegistered(data.Sid)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorDataBase, nil))
 		return
@@ -108,7 +103,7 @@ func FirstLoginUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
 		return
 	}
-	if claim.Sid != data.Sid {
+	if claim.Sid != data.Sid || claim.Uid != 0 {
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
 		return
 	}
@@ -123,12 +118,14 @@ func FirstLoginUpdate(c *gin.Context) {
 		}
 		avatarPath = path[0]
 	}
-	err = models.Register(data.Sid, token, data.Name, data.Nickname, avatarPath, data.Sex, data.Mobile, data.Bid)
+	user, err := models.Register(data.Sid, token, data.Name, data.Nickname, avatarPath, data.Sex, data.Mobile, data.Bid)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorDataBase, nil))
 		return
 	}
-	c.JSON(http.StatusOK, response.GetResponse(code.Success, nil))
+	c.JSON(http.StatusOK, response.GetResponse(code.Success, gin.H{
+		"uid": user.ID,
+	}))
 	logging.Logger.Infof("User: %s registered.", data.Sid)
 	return
 }
