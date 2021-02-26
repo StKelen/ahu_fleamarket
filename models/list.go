@@ -13,18 +13,19 @@ type List struct {
 }
 
 type ProfileList struct {
-	ID       uint    `gorm:"column:detail_id" json:"detail_id"`
-	Title    string  `json:"title"`
-	Price    float64 `json:"price"`
-	Avatar   string  `json:"avatar"`
-	Nickname string  `json:"nickname"`
-	Eid      uint    `gorm:"column:exchange_id" json:"exchange_id"`
-	Status   int     `json:"status"`
-	TargetId int     `json:"target_id"`
-	Cover    string  `gorm:"column:path" json:"cover"`
+	ID         uint    `gorm:"column:detail_id" json:"detail_id"`
+	Title      string  `json:"title"`
+	Price      float64 `json:"price"`
+	Avatar     string  `json:"avatar"`
+	Nickname   string  `json:"nickname"`
+	Eid        uint    `gorm:"column:exchange_id" json:"exchange_id"`
+	Status     int     `json:"status"`
+	TargetId   int     `json:"target_id"`
+	Cover      string  `gorm:"column:path" json:"cover"`
+	HasComment bool    `gorm:"column:has_comment" json:"has_comment"`
 }
 
-func GetListByPage(page int, search string, cid int, bid int, order string, orderBy string, hasMinPrice bool, minPrice float64, hasMaxPrice bool, maxPrice float64) (error, []List) {
+func GetListByPage(page int, search string, cid int, bid int, uid int, order string, orderBy string, hasMinPrice bool, minPrice float64, hasMaxPrice bool, maxPrice float64) (error, []List) {
 	var data []List
 	sql := `SELECT detail.detail_id, detail.title, detail.price, user.avatar, user.nickname, building.name, image.path
 			FROM detail, user, building, image
@@ -40,6 +41,9 @@ func GetListByPage(page int, search string, cid int, bid int, order string, orde
 	}
 	if bid != 0 {
 		sql += " AND user.building_id = " + fmt.Sprintf("%d", bid)
+	}
+	if uid != 0 {
+		sql += " AND detail.user_id = " + fmt.Sprintf("%d", uid)
 	}
 	if hasMinPrice {
 		sql += " AND detail.price >= " + fmt.Sprintf("%.2f", minPrice)
@@ -64,7 +68,7 @@ func GetListByPage(page int, search string, cid int, bid int, order string, orde
 
 func GetPublishList(uid uint, page int) (error, []ProfileList) {
 	var data []ProfileList
-	sql := `SELECT detail.detail_id, detail.title, detail.price, user.avatar, user.nickname, image.path, exchange.exchange_id, exchange.status, exchange.buyer_id AS target_id
+	sql := `SELECT detail.detail_id, detail.title, detail.price, user.avatar, user.nickname, image.path, exchange.exchange_id, exchange.status, exchange.buyer_id AS target_id,exchange.seller_comment IS NOT NULL AS has_comment
 			FROM detail
 			         LEFT JOIN exchange ON detail.detail_id = exchange.detail_id AND exchange.status < ?
 			         LEFT JOIN user ON exchange.buyer_id = user.user_id
@@ -82,7 +86,7 @@ func GetPublishList(uid uint, page int) (error, []ProfileList) {
 
 func GetBoughtList(uid uint, page int) (error, []ProfileList) {
 	var data []ProfileList
-	sql := `SELECT detail.detail_id, detail.title, detail.price, user.avatar, user.nickname, image.path, exchange.exchange_id, exchange.status, detail.user_id AS target_id
+	sql := `SELECT detail.detail_id, detail.title, detail.price, user.avatar, user.nickname, image.path, exchange.exchange_id, exchange.status, detail.user_id AS target_id, exchange.buyer_comment IS NOT NULL AS has_comment
 			FROM exchange, user, detail
 			         LEFT JOIN image ON detail.detail_id = image.detail_id
 			WHERE exchange.buyer_id = ?

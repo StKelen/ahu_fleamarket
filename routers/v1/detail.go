@@ -131,32 +131,21 @@ func GetDetail(c *gin.Context) {
 }
 
 func GetDetailBrief(c *gin.Context) {
-	didStr := c.Query("did")
-	if didStr == "" {
+	eidStr := c.Query("eid")
+	if eidStr == "" {
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetDetail, nil))
 		return
 	}
-	did, err := strconv.Atoi(didStr)
+	eid, err := strconv.Atoi(eidStr)
 	if err != nil {
-		logging.Logger.Errorf("Failed to parse detail_id: %s", didStr)
+		logging.Logger.Errorf("Failed to parse detail_id: %s", eidStr)
 		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetDetail, nil))
 		return
 	}
-	token := c.Request.Header.Get("Token")
-	if len(token) == 0 {
-		logging.Logger.Errorf("Failed to get nil token.")
-		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
-		return
-	}
-	claim, err := jwt.ParseToken(token)
+
+	err, data := models.GetDetailByIdBrief(uint(eid))
 	if err != nil {
-		logging.Logger.Errorf("Failed to parse token: %s", token)
-		c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorUserToken, nil))
-		return
-	}
-	err, data := models.GetDetailByIdBrief(uint(did))
-	if err != nil {
-		logging.Logger.Errorf("Faileed to get detail brief by did: %d,err: %s", did, err)
+		logging.Logger.Errorf("Faileed to get detail brief by did: %d,err: %s", eid, err)
 		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGetDetail, nil))
 		return
 	}
@@ -164,11 +153,15 @@ func GetDetailBrief(c *gin.Context) {
 	publishTimeStr := timeHandler(data.UploadTime)
 	c.JSON(http.StatusOK, response.GetResponse(code.Success, gin.H{
 		"did":          data.ID,
+		"eid":          data.Eid,
+		"title":        data.Title,
 		"price":        data.Price,
 		"buy_price":    data.BuyPrice,
 		"publish_date": publishTimeStr,
-		"image":        data.Path,
-		"is_buyer":     claim.Uid != data.Uid,
+		"cover":        data.Path,
+		"uid":          data.Uid,
+		"nickname":     data.Nickname,
+		"avatar":       data.Avatar,
 	}))
 	return
 }

@@ -38,6 +38,13 @@ type ExchangeWithSeller struct {
 	BuyerComment    string `json:"buyer_comment"`
 }
 
+type CommentList struct {
+	ID       uint   `gorm:"not null;column:id" json:"id"`
+	Comment  string `gorm:"not null" json:"comment"`
+	Nickname string `gorm:"not null" json:"nickname"`
+	Avatar   string `gorm:"not null" json:"avatar"`
+}
+
 func GetExchangeStatus(uid uint, did uint) (error, *ExchangeWithSeller) {
 	var exchange ExchangeWithSeller
 	sql := `SELECT exchange.exchange_id,
@@ -69,6 +76,15 @@ func GetExchangeStatus(uid uint, did uint) (error, *ExchangeWithSeller) {
 	return nil, &exchange
 }
 
+func GetExchangeById(eid uint) (error, *ExchangeWithSeller) {
+	var data ExchangeWithSeller
+	sql := `SELECT exchange.exchange_id, exchange.detail_id, detail.user_id AS 'seller_id', exchange.buyer_id, exchange.status, exchange.is_buyer_deleted, exchange.is_seller_deleted, exchange.buyer_comment, exchange.seller_comment
+			FROM exchange, detail
+			WHERE exchange.exchange_id = ? AND exchange.detail_id = detail.detail_id;`
+	err := db.Raw(sql, eid).Scan(&data).Error
+	return err, &data
+}
+
 func CreateExchange(buyerId uint, did uint) error {
 	var e = Exchange{
 		Did:     did,
@@ -88,7 +104,33 @@ func SellerDeleteExchange(eid uint) error {
 	err := db.Model(Exchange{}).Where("exchange_id = ?", eid).Update("is_seller_deleted", true).Error
 	return err
 }
+
 func BuyerDeleteExchange(eid uint) error {
 	err := db.Model(Exchange{}).Where("exchange_id = ?", eid).Update("is_buyer_deleted", true).Error
 	return err
+}
+
+func UploadSellerComment(eid uint, comment string) error {
+	err := db.Model(Exchange{}).Where("exchange_id = ?", eid).Update("seller_comment", comment).Error
+	return err
+}
+
+func UploadBuyerComment(eid uint, comment string) error {
+	err := db.Model(Exchange{}).Where("exchange_id = ?", eid).Update("buyer_comment", comment).Error
+	return err
+}
+
+func GetCommentsByUid(uid uint, page int) (error, []CommentList) {
+	var data []CommentList
+	sql := `SELECT id, comment, nickname, avatar
+			FROM (SELECT exchange.exchange_id AS 'id', exchange.seller_comment AS 'comment', user.nickname, user.avatar
+			 	FROM exchange, user, detail
+			 	WHERE exchange.buyer_id = ? AND exchange.detail_id = detail.detail_id AND detail.user_id = user.user_id AND exchange.seller_comment IS NOT NULL
+			 UNION
+				SELECT exchange.exchange_id AS 'id', exchange.buyer_comment AS 'comment', user.nickname, user.avatar
+				FROM exchange, user, detail
+				WHERE detail.user_id = ? AND exchange.detail_id = detail.detail_id AND exchange.buyer_id = user.user_id AND exchange.buyer_comment IS NOT NULL) AS comments 
+			GROUP BY id ORDER BY id DESC LIMIT 10 OFFSET ?;`
+	err := db.Raw(sql, uid, uid, (page-1)*10).Scan(&data).Error
+	return err, data
 }

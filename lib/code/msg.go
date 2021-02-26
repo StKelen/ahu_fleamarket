@@ -21,6 +21,7 @@ var MsgFlags = map[int]string{
 	ErrorGetStarInfo:           "获取收藏信息失败 ",
 	ErrorGetExchangeInfo:       "获取交易信息失败",
 	ErrorHandleExchangeRequest: "更新交易请求失败",
+	ErrorGetComment:            "获取评论列表失败",
 }
 
 func GetMsg(code int) string {

@@ -21,7 +21,7 @@ func InitRouter() *gin.Engine {
 
 		api.GET("/detail", v1.GetDetail)
 		api.POST("/detail", v1.PublishDetail)
-		api.DELETE("/detail",v1.DeleteDetail)
+		api.DELETE("/detail", v1.DeleteDetail)
 
 		api.GET("/user", v1.GetUser)
 		api.GET("/profile", v1.GetProfile)
@@ -35,6 +35,9 @@ func InitRouter() *gin.Engine {
 		api.GET("/exchange", v1.GetExchangeList)
 		api.POST("/exchange", v1.HandleExchange)
 		api.DELETE("/exchange", v1.DeleteExchange)
+
+		api.GET("/comment",v1.GetCommentList)
+		api.POST("/comment", v1.UploadComment)
 
 		brief := api.Group("/brief")
 		{

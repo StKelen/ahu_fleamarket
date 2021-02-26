@@ -92,13 +92,13 @@ func GetUserByIdBrief(uid uint) (error, BriefUser) {
 
 func GetUserBySidFull(uid uint) (error, FullUser) {
 	var user FullUser
-	sql := `SELECT user.user_id, user.sex, user.nickname, building.name, user.avatar, COUNT(detail.detail_id)     AS 'publish_count', COUNT(exchange.exchange_id) AS 'bought_count', COUNT(star.star_id)         AS 'star_count'
-			FROM building, user
-			         LEFT JOIN detail ON user.user_id = detail.user_id AND detail.is_deleted = false
-			         LEFT JOIN exchange ON user.user_id = exchange.buyer_id AND exchange.is_buyer_deleted = false AND exchange.status < ?
-			         LEFT JOIN star ON user.user_id = star.user_id
-			WHERE user.user_id = ? AND user.building_id = building.building_id;`
-	err := db.Raw(sql, Cancelled, uid).Scan(&user).Error
+	sql := `SELECT user.user_id, user.sex, user.nickname, building.name, user.avatar, publish.publish_count, bought.bought_count, stars.star_count
+			FROM (SELECT COUNT(exchange.exchange_id) AS 'bought_count' FROM exchange WHERE exchange.status < 6 AND exchange.buyer_id = 2) AS bought,
+			     (SELECT COUNT(detail.detail_id) AS 'publish_count' FROM detail WHERE detail.is_deleted = false AND detail.user_id = 2) AS publish,
+			     (SELECT COUNT(star.star_id) AS 'star_count' FROM star WHERE star.user_id = 2) AS stars,
+			     user, building
+			WHERE user.user_id = 2 AND user.building_id = building.building_id;`
+	err := db.Raw(sql, Cancelled, uid, uid, uid).Scan(&user).Error
 	return err, user
 }
 

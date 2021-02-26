@@ -22,7 +22,7 @@ func GetList(c *gin.Context) {
 	order := c.Query("order")
 	orderBy := c.Query("by")
 	var minPrice, maxPrice float64
-	var cid,bid int
+	var cid,bid,uid int
 	cidStr,hasCid := c.GetQuery("cid")
 	if hasCid {
 		cid, err = strconv.Atoi(cidStr)
@@ -41,6 +41,16 @@ func GetList(c *gin.Context) {
 			return
 		}
 	}
+	uidStr,hasUid := c.GetQuery("uid")
+	if hasUid {
+		uid, err = strconv.Atoi(uidStr)
+		if err != nil {
+			logging.Logger.Errorf("Failed to parse bid: %s, err: %s", uidStr, err)
+			c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetDetail, nil))
+			return
+		}
+	}
+
 	minPriceStr, hasMinPrice := c.GetQuery("minPrice")
 	maxPriceStr, hasMaxPrice := c.GetQuery("maxPrice")
 	if hasMinPrice {
@@ -59,7 +69,7 @@ func GetList(c *gin.Context) {
 			return
 		}
 	}
-	err, data := models.GetListByPage(page, search, cid, bid, order, orderBy, hasMinPrice, minPrice, hasMinPrice, maxPrice)
+	err, data := models.GetListByPage(page, search, cid, bid,uid, order, orderBy, hasMinPrice, minPrice, hasMinPrice, maxPrice)
 	if err != nil {
 		logging.Logger.Errorf("Failed to get detail list: %s", err)
 		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGetList, nil))
@@ -67,5 +77,4 @@ func GetList(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, response.GetResponse(code.Success, data))
 	return
-
 }

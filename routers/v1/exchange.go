@@ -52,7 +52,7 @@ func GetExchangeList(c *gin.Context) {
 		err, data := models.GetPublishList(claim.Uid, page)
 		if err != nil {
 			logging.Logger.Errorf("Failed to get publish list: %s", err)
-			c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetExchangeInfo, nil))
+			c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGetExchangeInfo, nil))
 			return
 		}
 		c.JSON(http.StatusOK, response.GetResponse(code.Success, data))
@@ -61,7 +61,16 @@ func GetExchangeList(c *gin.Context) {
 		err, data := models.GetBoughtList(claim.Uid, page)
 		if err != nil {
 			logging.Logger.Errorf("Failed to get bought list: %s", err)
-			c.JSON(http.StatusBadRequest, response.GetResponse(code.ErrorGetExchangeInfo, nil))
+			c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGetExchangeInfo, nil))
+			return
+		}
+		c.JSON(http.StatusOK, response.GetResponse(code.Success, data))
+		return
+	case "star":
+		err, data := models.GetStarList(claim.Uid, page)
+		if err != nil {
+			logging.Logger.Errorf("Failed to get star list: %s", err)
+			c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGetStarInfo, nil))
 			return
 		}
 		c.JSON(http.StatusOK, response.GetResponse(code.Success, data))
