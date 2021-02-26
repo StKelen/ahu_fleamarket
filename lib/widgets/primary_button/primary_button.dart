@@ -26,6 +26,7 @@ class PrimaryButton extends StatelessWidget {
       corner: FCorner.all(height / 2),
       alignment: Alignment.center,
       clickEffect: true,
+      highlightColor: Themes.primaryColor,
     );
   }
 }

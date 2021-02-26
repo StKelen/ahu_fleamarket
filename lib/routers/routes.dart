@@ -20,5 +20,8 @@ class Routes {
     router.define(RoutesPath.conversationPage, handler: conversationHandler);
     router.define(RoutesPath.publishListPage, handler: publishListHandler);
     router.define(RoutesPath.boughtListPage, handler: boughtListHandler);
+    router.define(RoutesPath.starListPage, handler: starListHandler);
+    router.define(RoutesPath.commentPage, handler: commentHandler);
+    router.define(RoutesPath.profilePage, handler: profileHandler);
   }
 }

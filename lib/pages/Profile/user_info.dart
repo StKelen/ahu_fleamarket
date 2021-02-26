@@ -1,6 +1,4 @@
 import 'package:async/async.dart';
-import 'package:flea_market/common/config/routes.dart';
-import 'package:flea_market/routers/index.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,11 +7,12 @@ import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/requests/index.dart';
 
-class Header extends StatelessWidget {
+class UserInfo extends StatelessWidget {
   final int uid;
-  final String publishStr;
   final AsyncMemoizer _memoizer = AsyncMemoizer();
-  Header({this.uid, this.publishStr, Key key}) : super(key: key);
+
+  UserInfo({this.uid, Key key}) : super(key: key);
+
   getUserInfo() {
     return _memoizer.runOnce(() async {
       var data;
@@ -38,14 +37,11 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: 90.w,
-                height: 90.w,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(ServiceUrl.uploadImageUrl + '/${data['avatar']}'),
-                ),
+              CircleAvatar(
+                radius: 100.r,
+                backgroundImage: NetworkImage(ServiceUrl.uploadImageUrl + '/${data['avatar']}'),
               ),
-              SizedBox(width: 20.w),
+              SizedBox(width: 30.w),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -53,13 +49,13 @@ class Header extends StatelessWidget {
                   Text(
                     data['nickname'],
                     style: TextStyle(
-                        fontSize: 38.sp,
+                        fontSize: 58.sp,
                         fontWeight: FontWeight.bold,
                         color: Themes.textPrimaryColor),
                   ),
                   Text(
-                    '居住在${data['building_name']}，$publishStr',
-                    style: TextStyle(fontSize: 25.sp, color: Colors.black54),
+                    '居住在${data['building_name']}',
+                    style: TextStyle(fontSize: 32.sp, color: Colors.black45),
                   )
                 ],
               )
@@ -67,20 +63,14 @@ class Header extends StatelessWidget {
           );
         }
         return Container(
-          height: 100.h,
-          child: InkWell(
-            child: child,
-            onTap: () => MyRouter.router.navigateTo(context, '${RoutesPath.profilePage}?uid=$uid'),
-          ),
-          padding: EdgeInsets.fromLTRB(5.w, 0, 0, 15.h),
-          margin: EdgeInsets.only(bottom: 15.h),
+          child: child,
+          padding: EdgeInsets.symmetric(horizontal: 30.w),
           decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                style: BorderStyle.solid,
-                color: Colors.black12,
-                width: 1,
-              ),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0, 0.9, 1],
+              colors: [Themes.accentColor, Themes.secondaryColor, Themes.pageBackgroundColor],
             ),
           ),
         );

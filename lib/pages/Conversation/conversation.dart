@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:dash_chat/dash_chat.dart';
+import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/im/im.dart';
-import 'package:flutter/material.dart';
-import 'package:jmessage_flutter/jmessage_flutter.dart';
-import 'package:dash_chat/dash_chat.dart';
 
 import 'bubble.dart';
 
@@ -101,7 +102,6 @@ class _ConversationState extends State<Conversation> {
 
   void _scrollToBottom() {
     Timer(Duration(milliseconds: 500), () {
-      print('执行了');
       _chatViewKey.currentState.scrollController.animateTo(
         _chatViewKey.currentState.scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
@@ -131,7 +131,6 @@ class _ConversationState extends State<Conversation> {
 
   @override
   Widget build(BuildContext context) {
-    print('build 执行了');
     return Scaffold(
       backgroundColor: Themes.pageBackgroundColor,
       appBar: AppBar(

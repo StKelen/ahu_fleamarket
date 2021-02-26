@@ -26,11 +26,10 @@ class BuildingListFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       padding: EdgeInsets.all(20.w),
-      width: size.width * 0.9,
+      width: 750.w * 0.9,
       child: FutureBuilder(
         future: getBuildingList(),
         builder: (context, snapshot) {
@@ -58,7 +57,7 @@ class BuildingListFormField extends StatelessWidget {
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(size.height / 2),
+                  borderRadius: BorderRadius.circular(3.h),
                   borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
             ),
             onChanged: onChanged,

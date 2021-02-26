@@ -12,6 +12,7 @@ class ServiceUrl {
   static String profileUrl = _baseUrl + '/profile';
   static String starUrl = _baseUrl + '/star';
   static String exchangeUrl = _baseUrl + '/exchange';
+  static String commentUrl = _baseUrl + '/comment';
 
   static String briefUrl = _baseUrl + '/brief';
   static String userBriefUrl = briefUrl + '/user';

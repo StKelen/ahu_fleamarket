@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui' as ui;
 
-import 'package:flea_market/widgets/full_screen_image/full_screen_image.dart';
 import 'package:flutter/material.dart';
-import 'package:dash_chat/dash_chat.dart';
 import 'package:fsuper/fsuper.dart';
+import 'package:dash_chat/dash_chat.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:flea_market/widgets/full_screen_image/full_screen_image.dart';
 
 class Bubble extends StatelessWidget {
   final ChatMessage message;
   final DateFormat timeFormat = DateFormat("HH:mm");
-
-  /// A flag which is used for assiging styles
   final bool isUser;
 
   final List<Widget> buttons;
@@ -26,18 +27,16 @@ class Bubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final constraints = BoxConstraints(
-      maxHeight: size.height,
-      maxWidth: size.width,
+      maxHeight: 1334.h,
+      maxWidth: 750.w,
     );
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: constraints.maxWidth * 0.8,
+        maxWidth: 550.w,
       ),
       child: Container(
-        margin: EdgeInsets.only(bottom: 15),
-        width: constraints.maxWidth * 0.7,
+        margin: EdgeInsets.only(bottom: 20.h),
         child: Align(
           alignment: isUser ? Alignment.topRight : Alignment.topLeft,
           child: message.image == null
@@ -51,22 +50,23 @@ class Bubble extends StatelessWidget {
 
 Widget _textHandler(String text, BoxConstraints constraints, bool isUser) {
   return FSuper(
-    padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+    padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 15.h, bottom: 15.h),
     backgroundColor: isUser ? Color(0xffa5ed7e) : Colors.white,
-    corner: FCorner.all(6),
+    corner: FCorner.all(10.r),
     text: text,
-    style: TextStyle(fontSize: 18),
+    style: TextStyle(fontSize: 30.sp),
     child1: Transform.rotate(
-      angle: 90,
+      angle: pi / 4,
       child: FSuper(
-        width: 20,
-        height: 20,
+        width: 30.w,
+        height: 30.w,
         backgroundColor: isUser ? Color(0xffa5ed7e) : Colors.white,
-        corner: FCorner.all(1.5),
+        corner: FCorner.all(1.r),
       ),
     ),
     child1Alignment: isUser ? Alignment.topRight : Alignment.topLeft,
-    child1Margin: isUser ? EdgeInsets.only(right: -4, top: 20) : EdgeInsets.only(left: -4, top: 20),
+    child1Margin:
+        isUser ? EdgeInsets.only(right: -10.w, top: 30.h) : EdgeInsets.only(left: -10.w, top: 30.h),
     shadowColor: isUser ? Color(0xffa5ed7e) : Colors.white,
     shadowBlur: 3,
   );
@@ -94,27 +94,28 @@ Widget _imageHandler(BuildContext ctx, String imagePath, BoxConstraints constrai
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           var data = snapshot.data;
-          var width = constraints.maxWidth * 0.6;
+          var width = 400.w;
           var scale = width / data.width;
           var height = data.height * scale;
           return FSuper(
             width: width,
             height: height,
-            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+            padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 15.h, bottom: 15.h),
             backgroundColor: isUser ? Color(0xffa5ed7e) : Colors.white,
             corner: FCorner.all(6),
             child1: Transform.rotate(
-              angle: 90,
+              angle: pi / 4,
               child: FSuper(
-                width: 20,
-                height: 20,
+                width: 30.w,
+                height: 30.w,
                 backgroundColor: isUser ? Color(0xffa5ed7e) : Colors.white,
-                corner: FCorner.all(1.5),
+                corner: FCorner.all(1.r),
               ),
             ),
             child1Alignment: isUser ? Alignment.topRight : Alignment.topLeft,
-            child1Margin:
-                isUser ? EdgeInsets.only(right: -4, top: 20) : EdgeInsets.only(left: -4, top: 20),
+            child1Margin: isUser
+                ? EdgeInsets.only(right: -10.w, top: 30.h)
+                : EdgeInsets.only(left: -10.w, top: 30.h),
             shadowColor: isUser ? Color(0xffa5ed7e) : Colors.white,
             shadowBlur: 3,
             child2: FullScreenWidget(
@@ -122,8 +123,8 @@ Widget _imageHandler(BuildContext ctx, String imagePath, BoxConstraints constrai
                 child: Hero(
                     tag: '$imagePath${image.hashCode}',
                     child: Image(
-                      width: width - 20,
-                      height: height - 20,
+                      width: width - 20.w,
+                      height: height - 15.h,
                       image: image,
                     ))),
             child2Alignment: Alignment.center,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frefresh/frefresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/images.dart';
@@ -83,11 +84,11 @@ class _SingleRowListState extends State<SingleRowList> {
         child: Image.asset(
           Images.loading,
           fit: BoxFit.contain,
-          height: 50,
-          width: 50,
+          height: 100.w,
+          width: 100.w,
         ),
       ),
-      headerHeight: 80,
+      headerHeight: 120.w,
       controller: _controller,
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -106,11 +107,11 @@ class _SingleRowListState extends State<SingleRowList> {
             : Image.asset(
                 Images.loading,
                 fit: BoxFit.contain,
-                height: 50,
-                width: 50,
+                height: 100.w,
+                width: 100.w,
               ),
       ),
-      footerHeight: 80,
+      footerHeight: 120.w,
       onRefresh: _refresh,
       onLoad: _loadMore,
     );

@@ -208,10 +208,11 @@ class PriceInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 70.h,
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
         color: Themes.secondaryColor,
-        borderRadius: BorderRadius.circular(30.h),
+        borderRadius: BorderRadius.circular(35.h),
       ),
       child: TextField(
         controller: controller,

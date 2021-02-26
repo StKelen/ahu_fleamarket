@@ -32,7 +32,6 @@ class FormInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
@@ -51,7 +50,7 @@ class FormInput extends StatelessWidget {
           enabledBorder:
               UnderlineInputBorder(borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
           focusedBorder: UnderlineInputBorder(
-              borderRadius: BorderRadius.circular(size.height / 2),
+              borderRadius: BorderRadius.circular(3.h),
               borderSide: BorderSide(color: Themes.primaryColor, width: 2)),
         ),
         style: TextStyle(

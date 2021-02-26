@@ -10,4 +10,7 @@ class RoutesPath {
   static String conversationPage = '/conversation';
   static String publishListPage = '/publish';
   static String boughtListPage = '/bought';
+  static String starListPage = '/star';
+  static String commentPage = '/comment';
+  static String profilePage = '/profile';
 }

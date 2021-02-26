@@ -45,54 +45,57 @@ class _UserInfoState extends State<UserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<GlobalModel>(context).getUid();
+    var uid = Provider.of<GlobalModel>(context).getUid();
     if (data == null) return Text('加载中');
     return Container(
       child: ListView(
         children: [
-          Container(
-            margin: EdgeInsets.all(20.w),
-            padding: EdgeInsets.all(30.w),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(offset: Offset(2, 3), color: Color(0x44B2AEC1), blurRadius: 5)
-                ]),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage('${ServiceUrl.uploadImageUrl}/${data['avatar']}'),
-                  radius: 70.r,
-                ),
-                SizedBox(width: 20.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data['nickname'],
-                      style: TextStyle(
-                        fontSize: 48.sp,
-                        color: Themes.textPrimaryColor,
+          InkWell(
+            onTap: () => MyRouter.router.navigateTo(context, '${RoutesPath.profilePage}?uid=$uid'),
+            child: Container(
+              margin: EdgeInsets.all(20.w),
+              padding: EdgeInsets.all(30.w),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(offset: Offset(2, 3), color: Color(0x44B2AEC1), blurRadius: 5)
+                  ]),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage('${ServiceUrl.uploadImageUrl}/${data['avatar']}'),
+                    radius: 70.r,
+                  ),
+                  SizedBox(width: 20.w),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data['nickname'],
+                        style: TextStyle(
+                          fontSize: 48.sp,
+                          color: Themes.textPrimaryColor,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        data['sex'] == '男'
-                            ? IconFont(IconNames.nan, size: 36.sp)
-                            : IconFont(IconNames.nv, size: 36.sp),
-                        SizedBox(width: 10.w),
-                        Text(
-                          '居住于${data['building']}',
-                          style: TextStyle(color: Themes.textSecondaryColor, fontSize: 26.sp),
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ],
+                      SizedBox(height: 10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          data['sex'] == '男'
+                              ? IconFont(IconNames.nan, size: 36.sp)
+                              : IconFont(IconNames.nv, size: 36.sp),
+                          SizedBox(width: 10.w),
+                          Text(
+                            '居住于${data['building']}',
+                            style: TextStyle(color: Themes.textSecondaryColor, fontSize: 26.sp),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           Container(
@@ -106,7 +109,8 @@ class _UserInfoState extends State<UserInfo> {
                 ]),
             child: Row(
               children: [
-                ToolIcon(IconNames.gonglve, '我收藏的 ${data['star_count']}', ''),
+                ToolIcon(
+                    IconNames.gonglve, '我收藏的 ${data['star_count']}', '${RoutesPath.starListPage}'),
                 ToolIcon(IconNames.xinwen, '我发布的 ${data['publish_count']}',
                     '${RoutesPath.publishListPage}'),
                 ToolIcon(IconNames.gouwu, '我买到的 ${data['bought_count']}',

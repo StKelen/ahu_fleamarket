@@ -76,7 +76,6 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Themes.pageBackgroundColor,
@@ -87,7 +86,7 @@ class _SearchState extends State<Search> {
               children: [
                 Positioned(
                   top: 0,
-                  width: size.width,
+                  width: 750.w,
                   child: Container(
                     height: 60.h,
                     decoration: BoxDecoration(color: Colors.white),

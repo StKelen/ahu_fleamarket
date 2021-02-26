@@ -9,8 +9,18 @@ class BoughtList extends StatelessWidget {
   final String _url = '${ServiceUrl.exchangeUrl}?type=bought&';
 
   Widget _itemBuilder(data, refresh) {
-    return BoughtListItem(data['detail_id'], data['status'], data['exchange_id'], data['target_id'],
-        data['avatar'], data['nickname'], data['cover'], data['title'], data['price'], refresh);
+    return BoughtListItem(
+        data['detail_id'],
+        data['status'],
+        data['exchange_id'],
+        data['target_id'],
+        data['avatar'],
+        data['nickname'],
+        data['cover'],
+        data['title'],
+        data['price'],
+        data['has_comment'],
+        refresh);
   }
 
   @override

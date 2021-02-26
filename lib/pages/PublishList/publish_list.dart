@@ -19,6 +19,7 @@ class PublishList extends StatelessWidget {
         data['cover'],
         data['title'],
         data['price'],
+        data['has_comment'],
         refresh);
   }
 

@@ -36,7 +36,6 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Container(
       child: FutureBuilder(
         future: getCategories(),
@@ -49,7 +48,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
             items = list.map((element) {
               return DropdownMenuItem(
                 child: Container(
-                  width: size.width,
+                  width: 750.w,
                   child: Row(
                     children: [
                       category(element['icon'], 50.sp),

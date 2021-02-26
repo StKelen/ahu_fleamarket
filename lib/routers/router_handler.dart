@@ -1,3 +1,6 @@
+import 'package:flea_market/pages/Comment/comment.dart';
+import 'package:flea_market/pages/Profile/profile.dart';
+import 'package:flea_market/pages/Star/star.dart';
 import 'package:fluro/fluro.dart';
 
 import 'package:flea_market/pages/Login/login.dart';
@@ -58,4 +61,18 @@ Handler publishListHandler = Handler(handlerFunc: (ctx, params) {
 
 Handler boughtListHandler = Handler(handlerFunc: (ctx, params) {
   return BoughtList();
+});
+
+Handler starListHandler = Handler(handlerFunc: (ctx, param) {
+  return StarList();
+});
+
+Handler commentHandler = Handler(handlerFunc: (ctx, params) {
+  var eid = int.parse(params['eid']?.first);
+  return Comment(eid);
+});
+
+Handler profileHandler = Handler(handlerFunc: (ctx, params) {
+  var uid = int.parse(params['uid']?.first);
+  return Profile(uid);
 });

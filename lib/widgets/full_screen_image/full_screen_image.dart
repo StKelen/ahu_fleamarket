@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FullScreenWidget extends StatelessWidget {
   FullScreenWidget(
@@ -93,7 +94,7 @@ class _FullScreenPageState extends State<FullScreenPage> {
         child: Container(
           color: widget.backgroundColor.withOpacity(opacity),
           constraints: BoxConstraints.expand(
-            height: MediaQuery.of(context).size.height,
+            height: 1334.h,
           ),
           child: Stack(
             children: <Widget>[

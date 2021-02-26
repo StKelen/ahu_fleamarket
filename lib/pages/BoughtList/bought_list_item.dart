@@ -21,9 +21,10 @@ class BoughtListItem extends StatelessWidget {
   final String cover;
   final String title;
   final num price;
+  final bool hasComment;
   final Function refresh;
   BoughtListItem(this.did, this.status, this.eid, this.sellerId, this.avatarPath, this.nickname,
-      this.cover, this.title, this.price, this.refresh,
+      this.cover, this.title, this.price, this.hasComment, this.refresh,
       {Key key})
       : super(key: key);
 
@@ -219,8 +220,14 @@ class BoughtListItem extends StatelessWidget {
         );
         break;
       case ExchangeStatus.Finished:
+        if (hasComment) return _fButtonWrapper(text: '删除', onPressed: () => _deleteRequest(ctx));
         return Row(children: [
-          _fButtonWrapper(text: '评价', onPressed: () {}),
+          _fButtonWrapper(
+              text: '评价',
+              onPressed: () => MyRouter.router
+                  .navigateTo(ctx, RoutesPath.commentPage + '?eid=$eid')
+                  .then((_) => refresh()),
+              isHighlight: true),
           SizedBox(width: 10),
           _fButtonWrapper(text: '删除', onPressed: () => _deleteRequest(ctx))
         ]);
@@ -277,6 +284,7 @@ class BoughtListItem extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           backgroundImage: NetworkImage('${ServiceUrl.uploadImageUrl}/$avatarPath'),
+                          radius: 30.r,
                         ),
                         SizedBox(width: 15.w),
                         Text(
