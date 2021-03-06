@@ -4,6 +4,7 @@ import (
 	"ahu_fleamarket/conf"
 	"ahu_fleamarket/lib/DES"
 	"ahu_fleamarket/models"
+	"fmt"
 	"github.com/zhshch2002/goreq"
 	"regexp"
 	"strconv"
@@ -16,7 +17,7 @@ func Login(sid string, password string) (error, *models.UserInfoData) {
 	req := goreq.Get(conf.WisdomAhuLoginUrl).AddParam("service", conf.WisdomAhuHomeBaseUrl)
 	res := c.Do(req)
 	if res.Err != nil {
-		return res.Err, nil
+		return fmt.Errorf("连接智慧安大错误"), nil
 	}
 	cookie := res.Cookies()
 	body := res.Text
@@ -41,17 +42,20 @@ func Login(sid string, password string) (error, *models.UserInfoData) {
 	req.SetFormBody(form)
 	res = c.Do(req)
 	if res.Err != nil {
-		return res.Err, nil
+		return fmt.Errorf("连接智慧安大错误"), nil
 	}
 	req = goreq.Post(conf.WisdomAhuUserInfoUrl)
 	req.SetJsonBody(map[string]string{
 		"BE_OPT_ID": DES.StrEnc(sid, "tp", "des", "param"),
 	})
 	res = c.Do(req)
+	if res.Err != nil {
+		return fmt.Errorf("连接智慧安大错误"), nil
+	}
 	var userInfo models.UserInfoData
 	err := res.BindJSON(&userInfo)
 	if err != nil {
-		return err, nil
+		return fmt.Errorf("用户名或密码错误"), nil
 	}
 	return nil, &userInfo
 }

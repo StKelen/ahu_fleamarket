@@ -8,6 +8,7 @@ import (
 	"ahu_fleamarket/pkg/response"
 	"ahu_fleamarket/pkg/upload"
 	"ahu_fleamarket/pkg/userInfoCrawler"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"mime/multipart"
@@ -26,8 +27,9 @@ func Login(c *gin.Context) {
 	}
 	err, userInfo := userInfoCrawler.Login(loginData.Sid, loginData.Password)
 	if err != nil {
-		logging.Logger.Errorf("Failed to login: %s", err)
-		c.JSON(http.StatusInternalServerError, response.GetResponse(code.ErrorGetLoginInfo, nil))
+		c.JSON(http.StatusOK, response.GetResponse(code.ErrorGetLoginInfo, gin.H{
+			"msg": fmt.Sprintf("%s", err),
+		}))
 		return
 	}
 	logging.Logger.Infof("Sid: %s, name: %s login Wisdom AHU.", userInfo.IdNumber, userInfo.Name)

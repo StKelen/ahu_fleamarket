@@ -51,7 +51,7 @@ func GetStarList(uid uint, page int) (error, []StarList) {
 	sql := `SELECT star.star_id, user.user_id, user.nickname, user.avatar, detail.detail_id, detail.title, detail.price, image.path
 			FROM user, star
 			         LEFT JOIN detail ON star.detail_id = detail.detail_id AND detail.is_deleted = false
-			         LEFt JOIN image ON detail.detail_id = detail.detail_id
+			         LEFt JOIN image ON image.detail_id = detail.detail_id
 			WHERE star.user_id = ?
 			GROUP BY star.star_id ORDER BY star.star_id DESC
 			LIMIT 10 OFFSET ?;`
