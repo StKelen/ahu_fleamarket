@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
@@ -47,14 +47,14 @@ class _SearchDrawerState extends State<SearchDrawer> {
     double maxPrice;
     if (minPriceStr != '') {
       if (!moneyRegexp.hasMatch(minPriceStr)) {
-        Fluttertoast.showToast(msg: '最低价格格式错误');
+        EasyLoading.showError('最低价格格式错误');
         return;
       }
       minPrice = double.parse(minPriceStr);
     }
     if (maxPriceStr != '') {
       if (!moneyRegexp.hasMatch(maxPriceStr)) {
-        Fluttertoast.showToast(msg: '最高价格格式错误');
+        EasyLoading.showError('最高价格格式错误');
         return;
       }
       maxPrice = double.parse(maxPriceStr);

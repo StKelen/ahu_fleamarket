@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/code/code.dart';
@@ -82,19 +82,19 @@ class _FirstLoginUpdateState extends State<FirstLoginUpdate> {
       await MyDio.post(ServiceUrl.firstLoginUpdateUrl, FormData.fromMap(data), (res) async {
         int code = res['code'];
         if (code != Code.Success) {
-          Fluttertoast.showToast(msg: res['msg']);
+          EasyLoading.showError(res['msg']);
           return;
         }
         int uid = res['data']['uid'];
         await IM.register(uid, sid, nickname, image?.path ?? null);
-        Fluttertoast.showToast(msg: '注册成功', backgroundColor: Colors.black);
+        EasyLoading.showSuccess('注册成功');
         GlobalModel.setUserInfo(uid, sid);
         Navigator.popUntil(context, (route) => route.isFirst);
       }, (e) {
-        Fluttertoast.showToast(msg: e);
+        EasyLoading.showError(e);
       });
     } else {
-      Fluttertoast.showToast(msg: '请完善相关信息');
+      EasyLoading.showError('请完善相关信息');
     }
   }
 

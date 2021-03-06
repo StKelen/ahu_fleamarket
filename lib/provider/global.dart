@@ -75,4 +75,19 @@ class GlobalModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  _logout() async {
+    MyDio.removeToken();
+    await _sp.clear();
+    await IM.logout();
+    _token = null;
+    _uid = null;
+    _sid = null;
+    _unreadMsgCount = null;
+    notifyListeners();
+  }
+
+  static logout() async {
+    await Provider.of<GlobalModel>(_ctx, listen: false)._logout();
+  }
 }

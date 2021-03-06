@@ -1,12 +1,12 @@
 import 'package:async/async.dart';
-import 'package:flea_market/common/config/routes.dart';
-import 'package:flea_market/routers/index.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/common/config/theme.dart';
+import 'package:flea_market/common/config/routes.dart';
+import 'package:flea_market/routers/index.dart';
 import 'package:flea_market/requests/index.dart';
 
 class Header extends StatelessWidget {
@@ -20,7 +20,7 @@ class Header extends StatelessWidget {
       await MyDio.get(ServiceUrl.userBriefUrl + '?uid=$uid', (res) {
         data = res;
       }, (e) {
-        Fluttertoast.showToast(msg: e);
+        EasyLoading.showError(e);
       });
       return data;
     });

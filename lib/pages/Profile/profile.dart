@@ -1,10 +1,12 @@
-import 'package:flea_market/common/config/service_url.dart';
-import 'package:flea_market/common/config/theme.dart';
-import 'package:flea_market/pages/Profile/comment_list.dart';
-import 'package:flea_market/widgets/list/list.dart';
-import 'user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:flea_market/common/config/service_url.dart';
+import 'package:flea_market/common/config/theme.dart';
+import 'package:flea_market/widgets/list/list.dart';
+
+import 'user_info.dart';
+import 'comment_list.dart';
 
 class Profile extends StatefulWidget {
   final int uid;

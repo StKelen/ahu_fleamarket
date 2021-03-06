@@ -1,6 +1,6 @@
 class ServiceUrl {
-  static String _baseUrl = 'http://192.168.0.103:8080/v1';
-  static String loginUrl = _baseUrl + '/test/login';
+  static String _baseUrl = 'http://172.27.112.1:8080/v1';
+  static String loginUrl = _baseUrl + '/login';
   static String buildingListUrl = _baseUrl + '/building';
   static String firstLoginUpdateUrl = _baseUrl + '/first-login-update';
   static String categoryUrl = _baseUrl + '/category';

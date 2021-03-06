@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flea_market/common/im/im.dart';
 import 'package:flea_market/common/config/routes.dart';
@@ -25,18 +25,18 @@ class _LoginState extends State<Login> {
   String password = '';
   final sidRegExp = RegExp(r'[A-Z][0-9]{4,7}');
 
-  void onClickBack() => Navigator.pop(context);
-
   void onChangeUid(String value) => sid = value;
 
   void onChangePassword(String value) => password = value;
 
   void onLogin() async {
+    EasyLoading.show(status: '登录中');
     var data = {
       'sid': sid,
       'password': password,
     };
     await MyDio.post(ServiceUrl.loginUrl, data, (res) async {
+      EasyLoading.dismiss();
       int code = res['code'];
       if (code == Code.UpdateUserInfo) {
         var sid = Uri.encodeQueryComponent(res['data']['sid']);
@@ -44,38 +44,29 @@ class _LoginState extends State<Login> {
         var sex = Uri.encodeQueryComponent(res['data']['sex']);
         var mobile = Uri.encodeQueryComponent(res['data']['mobile']);
         var path = RoutesPath.firstLoginUpdatePage + '?sid=$sid&name=$name&sex=$sex&mobile=$mobile';
+        EasyLoading.showInfo('请完善相关信息~');
         MyRouter.router.navigateTo(context, path);
         return;
       }
       if (code != Code.Success) {
-        Fluttertoast.showToast(msg: res['msg']);
+        EasyLoading.showError(res['data']['msg']);
         return;
       }
       int uid = res['data']['uid'];
       GlobalModel.setUserInfo(uid, sid);
       await IM.login(uid, sid);
-      Fluttertoast.showToast(msg: '登录成功');
+      EasyLoading.showSuccess('登录成功');
       Navigator.pop(context);
     }, (e) {
-      Fluttertoast.showToast(
-          msg: e, toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.CENTER, fontSize: 20);
+      EasyLoading.dismiss();
+      EasyLoading.showError(e);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          color: Themes.primaryColor,
-          splashColor: Color(0x00FFFFFF),
-          highlightColor: Color(0x00FFFFFF),
-          onPressed: onClickBack,
-        ),
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-      ),
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Center(
         child: Column(
           children: [

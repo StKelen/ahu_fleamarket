@@ -1,4 +1,9 @@
 import 'package:fbutton/fbutton.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:flea_market/common/code/code.dart';
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/config/service_url.dart';
@@ -6,10 +11,6 @@ import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/provider/global.dart';
 import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/routers/index.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 
 class StarItem extends StatelessWidget {
   final String nickname;
@@ -76,12 +77,12 @@ class StarItem extends StatelessWidget {
               onPressed: () async {
                 await MyDio.put(ServiceUrl.starUrl + '?did=$detailId', resolve: (res) {
                   if (res['code'] != Code.Success) {
-                    Fluttertoast.showToast(msg: '确认失败');
+                    EasyLoading.showError('确认失败');
                     return;
                   }
                   refresh();
                 }, reject: (e) {
-                  Fluttertoast.showToast(msg: '确认失败');
+                  EasyLoading.showError('确认失败');
                 });
                 Navigator.pop(ctx);
               },
@@ -109,18 +110,22 @@ class StarItem extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       child: Column(
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage('${ServiceUrl.uploadImageUrl}/$avatar'),
-                radius: 30.r,
-              ),
-              SizedBox(width: 15.w),
-              Text(
-                nickname,
-                style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
-              )
-            ],
+          GestureDetector(
+            onTap: () =>
+                MyRouter.router.navigateTo(context, '${RoutesPath.profilePage}?uid=$sellerId'),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage('${ServiceUrl.uploadImageUrl}/$avatar'),
+                  radius: 30.r,
+                ),
+                SizedBox(width: 15.w),
+                Text(
+                  nickname,
+                  style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
           ),
           SizedBox(height: 12.h),
           detailId == 0
@@ -136,44 +141,48 @@ class StarItem extends StatelessWidget {
                     ),
                   ),
                 )
-              : Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Image.network(
-                        '${ServiceUrl.uploadImageUrl}/$cover',
-                        width: 200.w,
-                        height: 200.w,
-                        fit: BoxFit.cover,
+              : GestureDetector(
+                  onTap: () =>
+                      MyRouter.router.navigateTo(context, '${RoutesPath.detailPage}?did=$detailId'),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: Image.network(
+                          '${ServiceUrl.uploadImageUrl}/$cover',
+                          width: 200.w,
+                          height: 200.w,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 20.w),
-                    SizedBox(
-                      height: 180.w,
-                      width: 430.w,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            title,
-                            style: TextStyle(fontSize: 30.sp),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            '¥$price',
-                            style: TextStyle(
-                              fontSize: 28.sp,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
+                      SizedBox(width: 20.w),
+                      SizedBox(
+                        height: 180.w,
+                        width: 430.w,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(fontSize: 30.sp),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
+                            Text(
+                              '¥$price',
+                              style: TextStyle(
+                                fontSize: 28.sp,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.right,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
           SizedBox(height: 15.h),
           Row(

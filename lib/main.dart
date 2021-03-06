@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 import 'common/config/theme.dart';
@@ -48,6 +49,7 @@ class App extends StatelessWidget {
         ),
       ),
       home: IndexPage(),
+      builder: EasyLoading.init(),
     );
   }
 }

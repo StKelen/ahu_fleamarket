@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frefresh/frefresh.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/images.dart';
@@ -53,7 +53,7 @@ class _SingleRowListState extends State<SingleRowList> {
         });
       },
       (e) {
-        Fluttertoast.showToast(msg: e);
+        EasyLoading.showError(e);
       },
     );
   }

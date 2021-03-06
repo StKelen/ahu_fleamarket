@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/requests/index.dart';
@@ -16,6 +16,7 @@ import 'package:flea_market/widgets/row_button/row_button.dart';
 import 'package:flea_market/widgets/category_dropdown/category_dropdown.dart';
 
 import 'price_form.dart';
+import 'package:flea_market/pages/Detail/detail.dart';
 
 class Upload extends StatefulWidget {
   @override
@@ -115,7 +116,7 @@ class _UploadState extends State<Upload> {
 
   void onPublish() async {
     if (price.toStringAsFixed(2) == '0.00') {
-      Fluttertoast.showToast(msg: '请不要白给');
+      EasyLoading.showInfo('请不要白给');
       return;
     }
 
@@ -129,7 +130,13 @@ class _UploadState extends State<Upload> {
       }).toList()
     };
     var form = FormData.fromMap(data);
-    await MyDio.post(ServiceUrl.detailUrl, form, (res) {}, (e) {});
+    await MyDio.post(ServiceUrl.detailUrl, form, (res) {
+      EasyLoading.showSuccess('发布成功');
+      var did = res['data']['did'];
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => Detail(did: did)));
+    }, (e) {
+      EasyLoading.showError(e);
+    });
   }
 
   @override

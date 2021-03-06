@@ -1,6 +1,6 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/service_url.dart';
@@ -19,7 +19,7 @@ class UserInfo extends StatelessWidget {
       await MyDio.get(ServiceUrl.userBriefUrl + '?uid=$uid', (res) {
         data = res;
       }, (e) {
-        Fluttertoast.showToast(msg: e);
+        EasyLoading.showError(e);
       });
       return data;
     });

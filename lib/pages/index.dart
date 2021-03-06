@@ -4,9 +4,11 @@ import 'package:flea_market/routers/index.dart';
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/iconfont/icon_font.dart';
+import 'package:flea_market/common/im/im.dart';
 
 import 'package:flea_market/widgets/global_appbar/appbar.dart';
 import 'package:flea_market/widgets/bottom_tab_bar/bottom_tab_bar.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'Home/home.dart';
@@ -50,7 +52,14 @@ class _IndexPageState extends State<IndexPage> {
         selectedIndex = index;
       });
 
-  void onClickUploadBtn() => MyRouter.router.navigateTo(context, RoutesPath.uploadPage);
+  void onClickUploadBtn() {
+    if (IM.my == null) {
+      EasyLoading.showInfo('请登录~');
+      MyRouter.router.navigateTo(context, RoutesPath.loginPage);
+      return;
+    }
+    MyRouter.router.navigateTo(context, RoutesPath.uploadPage);
+  }
 
   @override
   Widget build(BuildContext context) {

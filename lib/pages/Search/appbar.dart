@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
@@ -10,7 +10,7 @@ PreferredSizeWidget getAppbar(ctx, search, getKeywords) {
 
   void submitSearch() {
     if (controller.text == '') {
-      Fluttertoast.showToast(msg: '请输入关键词');
+      EasyLoading.showInfo('请输入关键词');
       return;
     }
     getKeywords(controller.text);

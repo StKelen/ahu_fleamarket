@@ -4,6 +4,7 @@ import 'package:flea_market/provider/global.dart';
 
 class MyDio {
   static BaseOptions options = BaseOptions(connectTimeout: 3000, receiveTimeout: 1000);
+  static LoginInterceptor loginInterceptor = LoginInterceptor();
 
   static Future get(String url, Function resolve, Function reject) async {
     await _dio.get(url).then((value) {
@@ -57,11 +58,22 @@ class MyDio {
 
   static setToken(String t) {
     if (t == null || t == '') return;
-    _dio.interceptors.add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      options.headers.addAll({'Token': t});
-      return options;
-    }));
+    LoginInterceptor.token = t;
+    _dio.interceptors.add(loginInterceptor);
+  }
+
+  static removeToken() {
+    _dio.interceptors.remove(loginInterceptor);
   }
 
   static Dio _dio = Dio(options);
+}
+
+class LoginInterceptor extends Interceptor {
+  static String token;
+  @override
+  Future onRequest(RequestOptions options) {
+    options.headers.addAll({'Token': token});
+    return super.onRequest(options);
+  }
 }

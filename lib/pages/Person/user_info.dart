@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/common/config/routes.dart';
@@ -10,6 +10,8 @@ import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/provider/global.dart';
 import 'package:flea_market/routers/index.dart';
+
+import 'tool_bar.dart';
 
 class UserInfo extends StatefulWidget {
   @override
@@ -26,14 +28,14 @@ class _UserInfoState extends State<UserInfo> {
         responseData = res['data'];
       });
     }, (e) {
-      Fluttertoast.showToast(msg: e);
+      EasyLoading.showError(e);
     });
     if (responseData != null) {
       setState(() {
         data = responseData;
       });
     } else {
-      Fluttertoast.showToast(msg: '请求错误');
+      EasyLoading.showError('请求错误');
     }
   }
 
@@ -117,7 +119,8 @@ class _UserInfoState extends State<UserInfo> {
                     '${RoutesPath.boughtListPage}'),
               ],
             ),
-          )
+          ),
+          ToolBar()
         ],
       ),
     );

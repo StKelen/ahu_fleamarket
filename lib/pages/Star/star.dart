@@ -1,7 +1,9 @@
-import 'package:flea_market/common/config/service_url.dart';
-import 'package:flea_market/pages/Star/star_item.dart';
-import 'package:flea_market/widgets/single_row_list/single_row_list.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flea_market/common/config/service_url.dart';
+import 'package:flea_market/widgets/single_row_list/single_row_list.dart';
+
+import 'star_item.dart';
 
 class StarList extends StatelessWidget {
   final String _url = '${ServiceUrl.exchangeUrl}?type=star&';

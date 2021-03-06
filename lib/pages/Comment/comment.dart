@@ -1,13 +1,13 @@
 import 'package:async/async.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:flea_market/common/code/code.dart';
 import 'package:flea_market/common/config/service_url.dart';
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/widgets/primary_button/primary_button.dart';
-
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Comment extends StatelessWidget {
   final int eid;
@@ -21,7 +21,7 @@ class Comment extends StatelessWidget {
         await MyDio.get(ServiceUrl.detailBriefUrl + '?eid=$eid', (res) {
           data = res;
         }, (e) {
-          Fluttertoast.showToast(msg: e);
+          EasyLoading.showError(e);
         });
         return data;
       });
@@ -46,14 +46,14 @@ class Comment extends StatelessWidget {
                   },
                   (res) {
                     if (res['code'] != Code.Success) {
-                      Fluttertoast.showToast(msg: '评价失败');
+                      EasyLoading.showError('评价失败');
                       return;
                     }
-                    Fluttertoast.showToast(msg: '评价成功');
+                    EasyLoading.showSuccess('评价成功');
                     Navigator.pop(ctx);
                   },
                   (e) {
-                    Fluttertoast.showToast(msg: e);
+                    EasyLoading.showError(e);
                   },
                 );
                 Navigator.pop(ctx);

@@ -1,21 +1,22 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:flea_market/common/im/im.dart';
 import 'package:flea_market/common/code/code.dart';
 import 'package:flea_market/common/config/theme.dart';
 import 'package:flea_market/common/config/routes.dart';
 import 'package:flea_market/common/exchange_status.dart';
 import 'package:flea_market/common/config/service_url.dart';
-import 'package:flea_market/pages/Detail/star.dart';
 import 'package:flea_market/provider/global.dart';
 import 'package:flea_market/routers/index.dart';
 import 'package:flea_market/requests/index.dart';
 import 'package:flea_market/widgets/primary_button/primary_button.dart';
 
 import 'header.dart';
+import 'star.dart';
 
 class Detail extends StatelessWidget {
   final int did;
@@ -28,7 +29,7 @@ class Detail extends StatelessWidget {
         await MyDio.get(ServiceUrl.detailUrl + '?did=$did', (res) {
           data = res;
         }, (e) {
-          Fluttertoast.showToast(msg: e);
+          EasyLoading.showError(e);
         });
         return data;
       });
@@ -53,12 +54,12 @@ class Detail extends StatelessWidget {
                   {"new_status": ExchangeStatus.BuyerStart.index, "detail_id": did},
                   (res) {
                     if (res['code'] != Code.Success) {
-                      Fluttertoast.showToast(msg: '购买失败');
+                      EasyLoading.showError('购买失败');
                       return;
                     }
                   },
                   (err) {
-                    Fluttertoast.showToast(msg: '购买失败');
+                    EasyLoading.showError('购买失败');
                   },
                 );
                 Navigator.pop(ctx);
@@ -78,12 +79,10 @@ class Detail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFFFFF),
         elevation: 0,
-        iconTheme: IconThemeData(color: Themes.primaryColor),
         title: Text('详情'),
       ),
-      backgroundColor: Themes.pageBackgroundColor,
+      backgroundColor: Colors.white,
       body: FutureBuilder(
         future: getDetail(),
         builder: (context, snapshot) {
@@ -136,50 +135,52 @@ class Detail extends StatelessWidget {
                     ],
                   ),
                 ),
-                Positioned(
-                  width: 750.w,
-                  bottom: 0,
-                  height: 80.h,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(blurRadius: 9, offset: Offset(0, 3), color: Colors.black26)
-                      ],
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Star(did),
-                        Provider.of<GlobalModel>(context).getUid() == data['uid']
-                            ? Container()
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  PrimaryButton(
-                                    height: 60.h,
-                                    width: 160.w,
-                                    fontSize: 26.h,
-                                    text: '立即购买',
-                                    onPressed: () => handleBuy(context),
-                                  ),
-                                  SizedBox(width: 20.w),
-                                  PrimaryButton(
-                                    height: 60.h,
-                                    width: 160.w,
-                                    fontSize: 26.h,
-                                    text: '聊一聊',
-                                    onPressed: () => chat(context, data['uid']),
-                                  )
-                                ],
-                              )
-                      ],
-                    ),
-                  ),
-                ),
+                IM.my == null
+                    ? Container()
+                    : Positioned(
+                        width: 750.w,
+                        bottom: 0,
+                        height: 80.h,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(blurRadius: 9, offset: Offset(0, 3), color: Colors.black26)
+                            ],
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Star(did),
+                              Provider.of<GlobalModel>(context).getUid() == data['uid']
+                                  ? Container()
+                                  : Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        PrimaryButton(
+                                          height: 60.h,
+                                          width: 160.w,
+                                          fontSize: 26.h,
+                                          text: '立即购买',
+                                          onPressed: () => handleBuy(context),
+                                        ),
+                                        SizedBox(width: 20.w),
+                                        PrimaryButton(
+                                          height: 60.h,
+                                          width: 160.w,
+                                          fontSize: 26.h,
+                                          text: '聊一聊',
+                                          onPressed: () => chat(context, data['uid']),
+                                        )
+                                      ],
+                                    )
+                            ],
+                          ),
+                        ),
+                      ),
               ],
             ),
           );

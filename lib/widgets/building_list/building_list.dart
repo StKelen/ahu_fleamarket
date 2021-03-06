@@ -1,6 +1,6 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/config/theme.dart';
@@ -19,7 +19,7 @@ class BuildingListFormField extends StatelessWidget {
         await MyDio.get(ServiceUrl.buildingListUrl, (res) {
           data = res;
         }, (e) {
-          Fluttertoast.showToast(msg: '获取楼栋信息失败');
+          EasyLoading.showError('获取楼栋信息失败');
         });
         return data;
       });

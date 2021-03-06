@@ -30,8 +30,14 @@ class IM {
   static Future<void> login(int uid, String sid) async {
     await client.login(username: getUsername(uid), password: sid);
     my = await client.getMyInfo();
-    client.addReceiveMessageListener((_) => getUnreadMsgCounts());
-    await getUnreadMsgCounts();
+    client.addReceiveMessageListener(getUnreadMsgCounts);
+    await getUnreadMsgCounts(null);
+  }
+
+  static Future<void> logout() async {
+    client.removeReceiveMessageListener(getUnreadMsgCounts);
+    my = null;
+    client.logout();
   }
 
   static Future<void> register(int uid, String sid, String nickname, String avatarPath) async {
@@ -39,7 +45,7 @@ class IM {
     await login(uid, sid);
   }
 
-  static Future getUnreadMsgCounts() async {
+  static Future getUnreadMsgCounts(dynamic _) async {
     int count = await client.getAllUnreadCount();
     GlobalModel.setUnreadMsgCount(count);
   }
@@ -52,6 +58,7 @@ class IM {
   }
 
   static Future<List<JMConversationInfo>> getConversationList() async {
+    if (my == null) return [];
     var conversations = await client.getConversations();
     return conversations;
   }
@@ -64,7 +71,7 @@ class IM {
   static Future<void> exitConversation(JMConversationInfo conversation) async {
     var target = _generateTargetInfo((conversation.target as JMUserInfo).username);
     await client.exitConversation(target: target);
-    await getUnreadMsgCounts();
+    await getUnreadMsgCounts(null);
   }
 
   static Future<String> getOriginalImage(JMImageMessage msg) async {

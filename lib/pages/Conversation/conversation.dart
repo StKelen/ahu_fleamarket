@@ -39,6 +39,7 @@ class _ConversationState extends State<Conversation> {
   }
 
   void init() async {
+    if (IM.my == null) return;
     conversation = await IM.createConversation(widget.targetUid);
     var target = conversation.target as JMUserInfo;
     targetUser = ChatUser(

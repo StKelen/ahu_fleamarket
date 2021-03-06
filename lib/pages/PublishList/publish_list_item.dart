@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fbutton/fbutton.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flea_market/common/code/code.dart';
@@ -101,13 +101,13 @@ class PublishListItem extends StatelessWidget {
                   },
                   (res) {
                     if (res['code'] != Code.Success) {
-                      Fluttertoast.showToast(msg: '确认失败');
+                      EasyLoading.showError('确认失败');
                       return;
                     }
                     refresh();
                   },
                   (err) {
-                    Fluttertoast.showToast(msg: '确认失败');
+                    EasyLoading.showError('确认失败');
                   },
                 );
                 Navigator.pop(ctx);
@@ -143,13 +143,13 @@ class PublishListItem extends StatelessWidget {
                   },
                   (res) {
                     if (res['code'] != Code.Success) {
-                      Fluttertoast.showToast(msg: '确认失败');
+                      EasyLoading.showError('确认失败');
                       return;
                     }
                     refresh();
                   },
                   (err) {
-                    Fluttertoast.showToast(msg: '确认失败');
+                    EasyLoading.showError('确认失败');
                   },
                 );
                 Navigator.pop(ctx);
@@ -179,12 +179,12 @@ class PublishListItem extends StatelessWidget {
                 await MyDio.delete(ServiceUrl.exchangeUrl,
                     data: {"exchange_id": eid, "detail_id": did}, resolve: (res) {
                   if (res['code'] != Code.Success) {
-                    Fluttertoast.showToast(msg: '确认失败');
+                    EasyLoading.showError('确认失败');
                     return;
                   }
                   refresh();
                 }, reject: (e) {
-                  Fluttertoast.showToast(msg: '确认失败');
+                  EasyLoading.showError('确认失败');
                 });
                 Navigator.pop(ctx);
               },
@@ -219,13 +219,13 @@ class PublishListItem extends StatelessWidget {
                   },
                   (res) {
                     if (res['code'] != Code.Success) {
-                      Fluttertoast.showToast(msg: '确认失败');
+                      EasyLoading.showError('确认失败');
                       return;
                     }
                     refresh();
                   },
                   (err) {
-                    Fluttertoast.showToast(msg: '确认失败');
+                    EasyLoading.showError('确认失败');
                   },
                 );
                 Navigator.pop(ctx);
@@ -261,13 +261,13 @@ class PublishListItem extends StatelessWidget {
                   },
                   (res) {
                     if (res['code'] != Code.Success) {
-                      Fluttertoast.showToast(msg: '确认失败');
+                      EasyLoading.showError('确认失败');
                       return;
                     }
                     refresh();
                   },
                   (err) {
-                    Fluttertoast.showToast(msg: '确认失败');
+                    EasyLoading.showError('确认失败');
                   },
                 );
                 Navigator.pop(ctx);
@@ -296,12 +296,12 @@ class PublishListItem extends StatelessWidget {
               onPressed: () async {
                 await MyDio.delete('${ServiceUrl.detailUrl}?did=$did', resolve: (res) {
                   if (res['code'] != Code.Success) {
-                    Fluttertoast.showToast(msg: '确认失败');
+                    EasyLoading.showError('确认失败');
                     return;
                   }
                   refresh();
                 }, reject: (e) {
-                  Fluttertoast.showToast(msg: '确认失败');
+                  EasyLoading.showError('确认失败');
                 });
                 Navigator.pop(ctx);
               },
@@ -399,18 +399,23 @@ class PublishListItem extends StatelessWidget {
             children: [
               status == ExchangeStatus.NoExchange.index
                   ? Container()
-                  : Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage('${ServiceUrl.uploadImageUrl}/$avatarPath'),
-                          radius: 30.r,
-                        ),
-                        SizedBox(width: 15.w),
-                        Text(
-                          nickname,
-                          style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
-                        )
-                      ],
+                  : GestureDetector(
+                      onTap: () => MyRouter.router
+                          .navigateTo(context, '${RoutesPath.profilePage}?uid=$buyerId'),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:
+                                NetworkImage('${ServiceUrl.uploadImageUrl}/$avatarPath'),
+                            radius: 30.r,
+                          ),
+                          SizedBox(width: 15.w),
+                          Text(
+                            nickname,
+                            style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
                     ),
               Text(
                 _statusTipHandler(),
@@ -419,41 +424,44 @@ class PublishListItem extends StatelessWidget {
             ],
           ),
           SizedBox(height: 12.h),
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.r),
-                child: Image.network(
-                  '${ServiceUrl.uploadImageUrl}/$cover',
-                  width: 200.w,
-                  height: 200.w,
-                  fit: BoxFit.cover,
+          GestureDetector(
+            onTap: () => MyRouter.router.navigateTo(context, '${RoutesPath.detailPage}?did=$did'),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.r),
+                  child: Image.network(
+                    '${ServiceUrl.uploadImageUrl}/$cover',
+                    width: 200.w,
+                    height: 200.w,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              SizedBox(width: 20.w),
-              SizedBox(
-                height: 180.w,
-                width: 430.w,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(fontSize: 30.sp),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      '¥$price',
-                      style: TextStyle(
-                          fontSize: 28.sp, color: Colors.red, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                  ],
+                SizedBox(width: 20.w),
+                SizedBox(
+                  height: 180.w,
+                  width: 430.w,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(fontSize: 30.sp),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        '¥$price',
+                        style: TextStyle(
+                            fontSize: 28.sp, color: Colors.red, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.right,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(height: 15.h),
           Row(
